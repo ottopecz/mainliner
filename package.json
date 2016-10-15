@@ -1,0 +1,33 @@
+{
+  "name": "solid-waddle",
+  "version": "1.0.0",
+  "description": "dependency injection for node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ottopecz/solid-waddle.git"
+  },
+  "keywords": [
+    "node",
+    "dependency",
+    "injection"
+  ],
+  "author": "Otto Pecz <otto.pecz@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ottopecz/solid-waddle/issues"
+  },
+  "homepage": "https://github.com/ottopecz/solid-waddle#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^3.8.0",
+    "esprima": "^3.1.0",
+    "grunt": "^1.0.1",
+    "grunt-eslint": "^19.0.0",
+    "grunt-mocha-test": "^0.13.2",
+    "mocha": "^3.1.2"
+  }
+}

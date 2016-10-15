@@ -1,0 +1,8 @@
+node_modules/
+test_results.txt
+coverage.html
+npm-debug.log
+.*.swp
+._*
+.DS_Store
+.git
