@@ -1,8 +1,22 @@
 const {expect} = require("chai");
-const app = require("../lib/index");
+const Waddle = require("../lib/index");
+const Container = require("../lib/Container");
 
-describe("index", () => {
-  it("should export \"bar\" as \"foo\"", () => {
-    expect(app).to.have.property("foo", "bar");
+describe("The index", () => {
+
+  it("should export \"Waddle\"", () => {
+    expect(Waddle).be.an.object;
+  });
+});
+
+describe("The create method of the Waddle", () => {
+
+  describe("when it's executed", () => {
+
+    const container = Waddle.create();
+
+    it("should return a container", () => {
+      expect(container).to.be.an.instanceOf(Container);
+    });
   });
 });

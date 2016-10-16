@@ -45,6 +45,21 @@ describe("The \"graph\" instance", () => {
 
 describe("The \"addVertex\" method of the \"graph\" instance", () => {
 
+  describe("when it's executed with a vertex which has already been registered", () => {
+
+    const vertexes = new Map();
+    const graph = new Graph(["lifeCycleMock"], vertexes);
+
+    class classVertex {}
+
+    graph.addVertex("foo", classVertex, "lifeCycleMock");
+
+    it("should throw an error", () => {
+      expect(() => graph.addVertex("foo", classVertex, "lifeCycleMock"))
+        .to.throw(Error, "foo has already been registered");
+    });
+  });
+
   describe("when it's executed with a class vertex and a \"known\" life cycle", () => {
 
     const vertexes = new Map();
@@ -140,7 +155,16 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
 
   describe("The \"getVertexData\" method of the \"graph\" instance", () => {
 
-    describe("when it's executed", () => {
+    describe("when it's executed and the vertex which data is being requested has not been registered", () => {
+
+      const graph = new Graph(["lifeCycleMock"]);
+
+      it("should return undefined", () => {
+        expect(graph.getVertexData("foo")).to.be.undefined;
+      });
+    });
+
+    describe("when it's executed and the vertex which data is being requested has already been registered", () => {
 
       class Vertex {}
 
@@ -179,6 +203,19 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
         expect(edges.values().next().value).to.be.equal(newEdge);
       });
     });
+
+    describe("when it's executed but the edge was already added", () => {
+
+      const edges = new Set([["foo", "bar"]]);
+      const newEdge = ["foo", "bar"];
+      const graph = new Graph(["lifeCycleMock"], new Map(), edges);
+
+      it("should throw a \"Duplicated edge\" error", () => {
+        expect(() => {
+          graph.addEdge(newEdge)
+        }).to.throw(Error, "Duplicated edge");
+      });
+    });
   });
 
   describe("The \"getAdjacentVertexes\" method of the \"graph\" instance", () => {
@@ -213,18 +250,7 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
 
         const adjacentVertexes = graph.getAdjacentVertexes("a");
 
-        expect(adjacentVertexes).to.deep.equal(new Map([
-          ["b", {
-            "vertex": LeafB,
-            "lifeCycle": "lifeCycleMock",
-            "type": "class"
-          }],
-          ["c", {
-            "vertex": LeafC,
-            "lifeCycle": "lifeCycleMock",
-            "type": "class"
-          }]
-        ]));
+        expect(adjacentVertexes).to.deep.equal(new Set(["b", "c"]));
       });
     });
   });
