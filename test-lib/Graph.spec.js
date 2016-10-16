@@ -8,7 +8,6 @@ describe("The \"graph\" instance", () => {
     const graph = new Graph(["lifeCycleMock"]);
 
     it("should be an instance of the Graph class", () => {
-
       expect(graph).to.be.an.instanceOf(Graph);
     });
   });
@@ -16,7 +15,6 @@ describe("The \"graph\" instance", () => {
   describe("when it gets created with none array lifecycle container", () => {
 
     it("should throw a type error", () => {
-
       expect(() => new Graph({})).to.throw(TypeError, "The lifeCycles parameter should be an array");
     });
   });
@@ -24,26 +22,23 @@ describe("The \"graph\" instance", () => {
   describe("when it gets created with none string lifecycle parameters", () => {
 
     it("should throw a type error", () => {
-
-      expect(() => new Graph([true])).to.throw(TypeError, "RootA lifeCycle should be a string");
+      expect(() => new Graph([true])).to.throw(TypeError, "A lifeCycle should be a string");
     });
   });
 
   describe("when it gets created with none Map vertexes parameter", () => {
 
     it("should throw a type error", () => {
-
       expect(() => new Graph(["lifeCycleMock"], "noneMap"))
         .to.throw(TypeError, "The vertexes parameter has to be a Map");
     });
   });
 
-  describe("when it gets created with none array edges parameter", () => {
+  describe("when it gets created with a none Set edges parameter", () => {
 
     it("should throw a type error", () => {
-
-      expect(() => new Graph(["lifeCycleMock"], new Map(), "noneArray"))
-        .to.throw(TypeError, "The edges parameter has to be an array");
+      expect(() => new Graph(["lifeCycleMock"], new Map(), "noneSet"))
+        .to.throw(TypeError, "The edges parameter has to be a Set");
     });
   });
 });
@@ -172,7 +167,7 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
 
     describe("when it's executed", () => {
 
-      const edges = [];
+      const edges = new Set([]);
       const newEdge = ["foo", "bar"];
       const graph = new Graph(["lifeCycleMock"], new Map(), edges);
 
@@ -180,8 +175,8 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
 
         graph.addEdge(newEdge);
 
-        expect(edges).to.have.length(1);
-        expect(edges[0]).to.equal(newEdge);
+        expect(edges.size).to.equal(1);
+        expect(edges.values().next().value).to.be.equal(newEdge);
       });
     });
   });
@@ -211,7 +206,7 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
           "type": "class"
         }]
       ]);
-      const edges = [["a", "b", "c"]];
+      const edges = new Set([["a", "b"], ["a", "c"]]);
       const graph = new Graph(["lifeCycleMock"], vertexes, edges);
 
       it("should return the adjacent vertexes of the given vertex as a Map", () => {
