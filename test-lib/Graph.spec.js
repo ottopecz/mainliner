@@ -216,9 +216,7 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
       const graph = new Graph(["lifeCycleMock"], new Map(), edges);
 
       it("should throw a \"Duplicated edge\" error", () => {
-        expect(() => {
-          graph.addEdge(newEdge)
-        }).to.throw(Error, "Duplicated edge");
+        expect(() => graph.addEdge(newEdge)).to.throw(Error, "Duplicated edge");
       });
     });
   });
