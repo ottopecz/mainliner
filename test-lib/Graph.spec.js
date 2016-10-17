@@ -166,20 +166,25 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
 
     describe("when it's executed and the vertex which data is being requested has already been registered", () => {
 
-      class Vertex {}
+      class FooVertex {}
+      class BarVertex {}
 
       const graph = new Graph(["lifeCycleMock"], new Map([["foo", {
-        "vertex": Vertex,
+        "vertex": FooVertex,
+        "lifeCycle": "lifeCycleMock",
+        "type": "class"
+      }], ["bar", {
+        "vertex": BarVertex,
         "lifeCycle": "lifeCycleMock",
         "type": "class"
       }]]));
 
       it("should return the meta data of the specified vertex", () => {
 
-        const data = graph.getVertexData("foo");
+        const data = graph.getVertexData("bar");
 
         expect(data).to.deep.equal({
-          "vertex": Vertex,
+          "vertex": BarVertex,
           "lifeCycle": "lifeCycleMock",
           "type": "class"
         });

@@ -123,47 +123,52 @@ describe("The \"get\" method of the container instance", () => {
 
     const container = new Container(new Graph(["perRequest"]));
 
-    /* eslint-disable no-unused-vars */
-    class One {
-      constructor(Two) {}
-      static get $inject() {
-        return ["two"];
+    it("should instantiate the class and its dependencies", () => {
+
+      class Five {}
+
+      class Four {
+        constructor(five) {
+          expect(five).to.be.an.instanceOf(Five);
+        }
+        static get $inject() {
+          return ["five"];
+        }
       }
-    }
 
-    class Two {
-      constructor(Three) {}
-      static get $inject() {
-        return ["three"];
+      class Three {
+        constructor(four) {
+          expect(four).to.be.an.instanceOf(Four);
+        }
+        static get $inject() {
+          return ["four"];
+        }
       }
-    }
 
-    class Three {
-      constructor(Four) {}
-      static get $inject() {
-        return ["four"];
+      class Two {
+        constructor(three) {
+          expect(three).to.be.an.instanceOf(Three);
+        }
+        static get $inject() {
+          return ["three"];
+        }
       }
-    }
 
-    class Four {
-      constructor(Four) {}
-      static get $inject() {
-        return ["five"];
+      class One {
+        constructor(two) {
+          expect(two).to.be.an.instanceOf(Two);
+        }
+        static get $inject() {
+          return ["two"];
+        }
       }
-    }
 
-    /* eslint-enable no-unused-vars */
-
-    class Five {}
-
-    container.register("one", One);
-    container.register("two", Two);
-    container.register("three", Three);
-    container.register("four", Four);
-    container.register("five", Five);
-
-    it("should throw an error", () => {
-      expect(container.get("one")).to.deep.equal(["one", "two", "three", "four", "five"]);
+      container.register("one", One);
+      container.register("two", Two);
+      container.register("three", Three);
+      container.register("four", Four);
+      container.register("five", Five);
+      expect(container.get("one")).to.be.an.instanceOf(One);
     });
   });
 
@@ -171,30 +176,31 @@ describe("The \"get\" method of the container instance", () => {
 
     const container = new Container(new Graph(["perRequest"]));
 
-    /* eslint-disable no-unused-vars */
-    class One {
-      constructor(Two) {}
-      static get $inject() {
-        return ["two", "three", "four", "five"];
+    it("should instantiate the class and its dependencies", () => {
+
+      class Two {}
+      class Three {}
+      class Four {}
+      class Five {}
+
+      class One {
+        constructor(two, three, four, five) {
+          expect(two).to.be.an.instanceOf(Two);
+          expect(three).to.be.an.instanceOf(Three);
+          expect(four).to.be.an.instanceOf(Four);
+          expect(five).to.be.an.instanceOf(Five);
+        }
+        static get $inject() {
+          return ["two", "three", "four", "five"];
+        }
       }
-    }
 
-    /* eslint-enable no-unused-vars */
-
-    class Two {}
-    class Three {}
-    class Four {}
-    class Five {}
-
-    container.register("one", One);
-    container.register("two", Two);
-    container.register("three", Three);
-    container.register("four", Four);
-    container.register("five", Five);
-
-    it("should throw an error", () => {
-
-      expect(container.get("one")).to.deep.equal(["one", "two", "three", "four", "five"]);
+      container.register("one", One);
+      container.register("two", Two);
+      container.register("three", Three);
+      container.register("four", Four);
+      container.register("five", Five);
+      expect(container.get("one")).to.be.an.instanceOf(One);
     });
   });
 
@@ -202,37 +208,38 @@ describe("The \"get\" method of the container instance", () => {
 
     const container = new Container(new Graph(["perRequest"]));
 
-    /* eslint-disable no-unused-vars */
-    class One {
-      constructor(Two) {}
-      static get $inject() {
-        return ["two", "three"];
-      }
-    }
-
-    class Two {}
-
-    class Three {
-      constructor(Four, Five) {}
-      static get $inject() {
-        return ["four", "five"];
-      }
-    }
-
-    /* eslint-enable no-unused-vars */
-
-    class Four {}
-    class Five {}
-
-    container.register("one", One);
-    container.register("two", Two);
-    container.register("three", Three);
-    container.register("four", Four);
-    container.register("five", Five);
-
     it("should throw an error", () => {
 
-      expect(container.get("one")).to.deep.equal(["one", "two", "three", "four", "five"]);
+      class Two {}
+
+      class One {
+        constructor(two) {
+          expect(two).to.be.an.instanceOf(Two);
+        }
+        static get $inject() {
+          return ["two", "three"];
+        }
+      }
+
+      class Four {}
+      class Five {}
+
+      class Three {
+        constructor(four, five) {
+          expect(four).to.be.an.instanceOf(Four);
+          expect(five).to.be.an.instanceOf(Five);
+        }
+        static get $inject() {
+          return ["four", "five"];
+        }
+      }
+
+      container.register("one", One);
+      container.register("two", Two);
+      container.register("three", Three);
+      container.register("four", Four);
+      container.register("five", Five);
+      expect(container.get("one")).to.be.an.instanceOf(One);
     });
   });
 
@@ -240,35 +247,39 @@ describe("The \"get\" method of the container instance", () => {
 
     const container = new Container(new Graph(["perRequest"]));
 
-    /* eslint-disable no-unused-vars */
-    class One {
-      constructor(Two) {}
-      static get $inject() {
-        return ["two", "three"];
-      }
-    }
-
-    class Two {
-      constructor(Four, Five) {}
-      static get $inject() {
-        return ["four", "five"];
-      }
-    }
-
-    /* eslint-enable no-unused-vars */
-
-    class Three {}
-    class Four {}
-    class Five {}
-
-    container.register("one", One);
-    container.register("two", Two);
-    container.register("three", Three);
-    container.register("four", Four);
-    container.register("five", Five);
-
     it("should throw an error", () => {
-      expect(container.get("one")).to.deep.equal(["one", "two", "four", "five", "three"]);
+
+      class Four {}
+      class Five {}
+
+      class Two {
+        constructor(four, five) {
+          expect(four).to.be.an.instanceOf(Four);
+          expect(five).to.be.an.instanceOf(Five);
+        }
+        static get $inject() {
+          return ["four", "five"];
+        }
+      }
+
+      class Three {}
+
+      class One {
+        constructor(two, three) {
+          expect(two).to.be.an.instanceOf(Two);
+          expect(three).to.be.an.instanceOf(Three);
+        }
+        static get $inject() {
+          return ["two", "three"];
+        }
+      }
+
+      container.register("one", One);
+      container.register("two", Two);
+      container.register("three", Three);
+      container.register("four", Four);
+      container.register("five", Five);
+      expect(container.get("one")).to.be.an.instanceOf(One);
     });
   });
 
@@ -276,100 +287,117 @@ describe("The \"get\" method of the container instance", () => {
 
     const container = new Container(new Graph(["perRequest"]));
 
-    /* eslint-disable no-unused-vars */
-    class One {
-      constructor(Two, Three) {}
-      static get $inject() {
-        return ["two", "three"];
-      }
-    }
-
-    class Two {
-      constructor(Four) {}
-      static get $inject() {
-        return ["four"];
-      }
-    }
-
-    class Three {
-      constructor(Four) {}
-      static get $inject() {
-        return ["four"];
-      }
-    }
-
-    class Four {
-      constructor(Five) {}
-      static get $inject() {
-        return ["five"];
-      }
-    }
-
-    /* eslint-enable no-unused-vars */
-
-    class Five {}
-
-    container.register("one", One);
-    container.register("two", Two);
-    container.register("three", Three);
-    container.register("four", Four);
-    container.register("five", Five);
-
     it("should not throw an error", () => {
-      expect(() => container.get("one")).to.not.throw(Error);
+
+      class Five {}
+
+      class Four {
+        constructor(five) {
+          expect(five).to.be.an.instanceOf(Five);
+        }
+        static get $inject() {
+          return ["five"];
+        }
+      }
+
+      class Two {
+        constructor(four) {
+          expect(four).to.be.an.instanceOf(Four);
+        }
+        static get $inject() {
+          return ["four"];
+        }
+      }
+
+      class Three {
+        constructor(four) {
+          expect(four).to.be.an.instanceOf(Four);
+        }
+        static get $inject() {
+          return ["four"];
+        }
+      }
+
+      class One {
+        constructor(two, three) {
+          expect(two).to.be.an.instanceOf(Two);
+          expect(three).to.be.an.instanceOf(Three);
+        }
+        static get $inject() {
+          return ["two", "three"];
+        }
+      }
+
+      container.register("one", One);
+      container.register("two", Two);
+      container.register("three", Three);
+      container.register("four", Four);
+      container.register("five", Five);
+      expect(container.get("one")).to.be.an.instanceOf(One);
     });
   });
 
-  describe.only("when it gets executed \"cycled\" dependency graph", () => {
+  describe("when it gets executed \"cycled\" dependency graph", () => {
 
     const container = new Container(new Graph(["perRequest"]));
 
-    /* eslint-disable no-unused-vars */
-    class One {
-      constructor(Two) {}
-      static get $inject() {
-        return ["two"];
-      }
-    }
-
-    class Two {
-      constructor(Three) {}
-      static get $inject() {
-        return ["three"];
-      }
-    }
-
-    class Three {
-      constructor(Four) {}
-      static get $inject() {
-        return ["four"];
-      }
-    }
-
-    class Four {
-      constructor(Five) {}
-      static get $inject() {
-        return ["five"];
-      }
-    }
-
-    class Five {
-      constructor(One) {}
-      static get $inject() {
-        return ["one"];
-      }
-    }
-
-    /* eslint-enable no-unused-vars */
-
-    container.register("one", One);
-    container.register("two", Two);
-    container.register("three", Three);
-    container.register("four", Four);
-    container.register("five", Five);
-
     it("should throw an error", () => {
-      expect(() => container.get("one")).not.throw(Error, "A cycle has been detected");
+
+      /* eslint-disable no-use-before-define */
+
+      class Five {
+        constructor(one) {
+          expect(one).to.be.an.instanceOf(One);
+        }
+        static get $inject() {
+          return ["one"];
+        }
+      }
+
+      /* eslint-enable no-use-before-define */
+
+      class Four {
+        constructor(five) {
+          expect(five).to.be.an.instanceOf(Five);
+        }
+        static get $inject() {
+          return ["five"];
+        }
+      }
+
+      class Three {
+        constructor(four) {
+          expect(four).to.be.an.instanceOf(Four);
+        }
+        static get $inject() {
+          return ["four"];
+        }
+      }
+
+      class Two {
+        constructor(three) {
+          expect(three).to.be.an.instanceOf(Three);
+        }
+        static get $inject() {
+          return ["three"];
+        }
+      }
+
+      class One {
+        constructor(two) {
+          expect(two).to.be.an.instanceOf(Two);
+        }
+        static get $inject() {
+          return ["two"];
+        }
+      }
+
+      container.register("one", One);
+      container.register("two", Two);
+      container.register("three", Three);
+      container.register("four", Four);
+      container.register("five", Five);
+      expect(() => container.get("one")).to.throw(Error, "A cycle has been detected");
     });
   });
 });
