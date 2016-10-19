@@ -339,6 +339,22 @@ describe("The \"get\" method of the container instance", () => {
     });
   });
 
+  describe("when it's executed on factorized vertex", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    it("should return whatever the function returns", () => {
+
+      class One {}
+
+      container.register("one", One);
+
+      const oneFactory = container.get("oneFactory");
+
+      expect(oneFactory.get()).to.be.an.instanceOf(One);
+    });
+  });
+
   describe("when it's executed on function vertex", () => {
 
     const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
@@ -740,7 +756,7 @@ describe("The \"get\" method of the container instance", () => {
 
       class One {
         constructor(two, overload) {
-          expect(overload).to.equal(extraParam)
+          expect(overload).to.equal(extraParam);
         }
         static get $inject() {
           return ["two"];
