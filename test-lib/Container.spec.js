@@ -1,5 +1,6 @@
 const {expect} = require("chai");
 const lifeCycles = require("../lib/lifeCycles");
+const modifiers = require("../lib/modifiers");
 const Graph = require("../lib/Graph");
 const Container = require("../lib/Container");
 
@@ -7,7 +8,7 @@ describe("The \"container\" instance", () => {
 
   describe("when it gets created", () => {
 
-    const container = new Container(new Graph(lifeCycles));
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
     it("should be an instance of the Container class", () => {
       expect(container).to.be.an.instanceOf(Container);
@@ -20,7 +21,7 @@ describe("The \"register\" method of the container instance", () => {
   describe("when it's executed", () => {
 
     const vertexes = new Map();
-    const container = new Container(new Graph(lifeCycles, vertexes));
+    const container = new Container(new Graph(lifeCycles, modifiers, vertexes), modifiers);
 
     it("should register a new vertex", () => {
 
@@ -39,7 +40,7 @@ describe("The \"register\" method of the container instance", () => {
   describe("when it's executed but the \"inject\" definition is not an array", () => {
 
     const vertexes = new Map();
-    const container = new Container(new Graph(lifeCycles, vertexes));
+    const container = new Container(new Graph(lifeCycles, modifiers, vertexes), modifiers);
 
     it("should throw an error", () => {
 
@@ -57,7 +58,7 @@ describe("The \"register\" method of the container instance", () => {
   describe("when it's executed but the \"inject\" definition is not an array of strings", () => {
 
     const vertexes = new Map();
-    const container = new Container(new Graph(lifeCycles, vertexes));
+    const container = new Container(new Graph(lifeCycles, modifiers, vertexes), modifiers);
 
     it("should throw an error", () => {
 
@@ -76,7 +77,7 @@ describe("The \"register\" method of the container instance", () => {
 
     const vertexes = new Map();
     const edges = new Set();
-    const container = new Container(new Graph(lifeCycles, vertexes, edges));
+    const container = new Container(new Graph(lifeCycles, modifiers, vertexes, edges), modifiers);
 
     it("should not register any the new edges", () => {
 
@@ -92,7 +93,7 @@ describe("The \"register\" method of the container instance", () => {
 
     const vertexes = new Map();
     const edges = new Set();
-    const container = new Container(new Graph(lifeCycles, vertexes, edges));
+    const container = new Container(new Graph(lifeCycles, modifiers, vertexes, edges), modifiers);
 
     it("should register the new edges", () => {
 
@@ -113,7 +114,7 @@ describe("The \"get\" method of the container instance", () => {
 
   describe("when it's executed but the vertex hasn't been registered", () => {
 
-    const container = new Container(new Graph(lifeCycles));
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
     it("should throw an error", () => {
       expect(() => container.get("foo")).to.throw(Error, "foo hasn't been registered");
@@ -122,7 +123,7 @@ describe("The \"get\" method of the container instance", () => {
 
   describe("when it's executed on a \"straight\" dependency graph", () => {
 
-    const container = new Container(new Graph(lifeCycles));
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
     it("should instantiate the class and its dependencies", () => {
 
@@ -175,7 +176,7 @@ describe("The \"get\" method of the container instance", () => {
 
   describe("when it's executed on a \"short tree\" dependency graph", () => {
 
-    const container = new Container(new Graph(lifeCycles));
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
     it("should instantiate the class and its dependencies", () => {
 
@@ -207,7 +208,7 @@ describe("The \"get\" method of the container instance", () => {
 
   describe("when it's executed on one kind of \"tall tree\" dependency graph", () => {
 
-    const container = new Container(new Graph(lifeCycles));
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
     it("should throw an error", () => {
 
@@ -246,7 +247,7 @@ describe("The \"get\" method of the container instance", () => {
 
   describe("when it's executed on an other kind of \"tall tree\" dependency graph", () => {
 
-    const container = new Container(new Graph(lifeCycles));
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
     it("should throw an error", () => {
 
@@ -286,7 +287,7 @@ describe("The \"get\" method of the container instance", () => {
 
   describe("when it's executed on a \"diamond\" dependency graph", () => {
 
-    const container = new Container(new Graph(lifeCycles));
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
     it("should not throw an error", () => {
 
@@ -340,7 +341,7 @@ describe("The \"get\" method of the container instance", () => {
 
   describe("when it's executed \"cycled\" dependency graph", () => {
 
-    const container = new Container(new Graph(lifeCycles));
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
     it("should throw an error", () => {
 
@@ -404,7 +405,7 @@ describe("The \"get\" method of the container instance", () => {
 
   describe("when it's executed on a dependency graph which has a \"perRequest\" vertex", () => {
 
-    const container = new Container(new Graph(lifeCycles));
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
     let four1Instance;
     let four2Instance;
@@ -458,7 +459,7 @@ describe("The \"get\" method of the container instance", () => {
 
   describe("when it's executed on \"singleton\" registered vertex", () => {
 
-    const container = new Container(new Graph(lifeCycles));
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
     class One {
       constructor() {}
@@ -477,7 +478,7 @@ describe("The \"get\" method of the container instance", () => {
 
   describe("when it's executed on a dependency graph which has a \"unique\" vertex", () => {
 
-    const container = new Container(new Graph(lifeCycles));
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
     let four1Instance;
     let four2Instance;
@@ -532,7 +533,7 @@ describe("The \"get\" method of the container instance", () => {
 
   describe("when it's executed on \"unique\" registered vertex", () => {
 
-    const container = new Container(new Graph(lifeCycles));
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
     class One {
       constructor() {}
@@ -547,6 +548,113 @@ describe("The \"get\" method of the container instance", () => {
 
       expect(request1).to.not.equal(request2);
       expect(request1).to.deep.equal(request2);
+    });
+  });
+
+  describe("when it's executed on a vertex which has a factorized class dependency", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    it("should not instantiate the vertex but inject a factory for that", () => {
+
+      class Three {}
+
+      class Two {
+        constructor(three, param) {
+          this.dependency = three;
+          this.factorized = param;
+        }
+        static get $inject() {
+          return ["three"];
+        }
+      }
+
+      class One {
+        constructor(twoFactory) {
+          expect(twoFactory).to.be.an.object;
+          expect(twoFactory).to.have.property("get").that.is.a.function;
+
+          const twoInstance = twoFactory.get(true);
+
+          expect(twoInstance).to.have.property("dependency").that.is.an.instanceOf(Three);
+          expect(twoInstance).to.have.property("factorized", true);
+        }
+        static get $inject() {
+          return ["twoFactory"];
+        }
+      }
+
+      container.register("one", One);
+      container.register("two", Two);
+      container.register("three", Three);
+
+      container.get("one");
+    });
+  });
+
+  describe("when it's executed on a vertex which has a factorized function dependency", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    it("should throw an error", () => {
+
+      function two() {}
+
+      class One {
+        constructor() {
+        }
+        static get $inject() {
+          return ["twoFactory"];
+        }
+      }
+
+      container.register("one", One);
+      container.register("two", two);
+
+      expect(() => container.get("one")).to.throw(Error, "Only classes can be factorized");
+    });
+  });
+
+  describe("when it's executed on a vertex which has a factorized passThrough dependency", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    it("should throw an error", () => {
+
+      const two = {"foo": "bar"};
+
+      class One {
+        constructor() {}
+        static get $inject() {
+          return ["twoFactory"];
+        }
+      }
+
+      container.register("one", One);
+      container.register("two", two);
+
+      expect(() => container.get("one")).to.throw(Error, "Only classes can be factorized");
+    });
+  });
+
+  describe("when it's executed on a vertex which has a optional dependency which is not registered", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    it("should inject a null value", () => {
+
+      class One {
+        constructor(two) {
+          expect(two).to.be.null;
+        }
+        static get $inject() {
+          return ["two?"];
+        }
+      }
+
+      container.register("one", One);
+
+      container.get("one");
     });
   });
 });

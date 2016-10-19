@@ -5,7 +5,7 @@ describe("The \"graph\" instance", () => {
 
   describe("when it gets created", () => {
 
-    const graph = new Graph(["lifeCycleMock"]);
+    const graph = new Graph({}, {});
 
     it("should be an instance of the Graph class", () => {
       expect(graph).to.be.an.instanceOf(Graph);
@@ -19,10 +19,17 @@ describe("The \"graph\" instance", () => {
     });
   });
 
+  describe("when it gets created without the \"modifiers\" parameter", () => {
+
+    it("should throw an error", () => {
+      expect(() => new Graph({})).to.throw(Error, "The modifiers must be a parameter of the constructor");
+    });
+  });
+
   describe("when it gets created with none Map vertexes parameter", () => {
 
     it("should throw a type error", () => {
-      expect(() => new Graph(["lifeCycleMock"], "noneMap"))
+      expect(() => new Graph({}, {}, "noneMap"))
         .to.throw(TypeError, "The vertexes parameter has to be a Map");
     });
   });
@@ -30,7 +37,7 @@ describe("The \"graph\" instance", () => {
   describe("when it gets created with a none Set edges parameter", () => {
 
     it("should throw a type error", () => {
-      expect(() => new Graph(["lifeCycleMock"], new Map(), "noneSet"))
+      expect(() => new Graph({}, {}, new Map(), "noneSet"))
         .to.throw(TypeError, "The edges parameter has to be a Set");
     });
   });
@@ -45,7 +52,7 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
       contains() {
         return true;
       }
-    }, vertexes);
+    }, {}, vertexes);
 
     class classVertex {}
 
@@ -64,7 +71,7 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
       contains() {
         return true;
       }
-    }, vertexes);
+    }, {}, vertexes);
 
     class classVertex {}
 
@@ -86,7 +93,7 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
       contains() {
         return false;
       }
-    });
+    }, {});
 
     class classVertex {}
 
@@ -106,7 +113,7 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
       contains() {
         return true;
       }
-    }, vertexes);
+    }, {}, vertexes);
 
     class classVertex {}
 
@@ -125,7 +132,7 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
   describe("when it's executed with a function vertex", () => {
 
     const vertexes = new Map();
-    const graph = new Graph({}, vertexes);
+    const graph = new Graph({}, {}, vertexes);
 
     function funcVertex() {}
 
@@ -143,7 +150,7 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
   describe("when it's executed with a passThrough vertex", () => {
 
     const vertexes = new Map();
-    const graph = new Graph({}, vertexes);
+    const graph = new Graph({}, {}, vertexes);
 
     const passThroughVertex = {"pass": "through"};
 
@@ -163,7 +170,7 @@ describe("The \"getVertexData\" method of the \"graph\" instance", () => {
 
   describe("when it's executed and the vertex which data is being requested has not been registered", () => {
 
-    const graph = new Graph(["lifeCycleMock"]);
+    const graph = new Graph({}, {});
 
     it("should return undefined", () => {
       expect(graph.getVertexData("foo")).to.be.undefined;
@@ -175,7 +182,7 @@ describe("The \"getVertexData\" method of the \"graph\" instance", () => {
     class FooVertex {}
     class BarVertex {}
 
-    const graph = new Graph(["lifeCycleMock"], new Map([["foo", {
+    const graph = new Graph({}, {}, new Map([["foo", {
       "vertex": FooVertex,
       "lifeCycle": "lifeCycleMock",
       "type": "class"
@@ -204,7 +211,7 @@ describe("The \"addEdge\" method of the \"graph\" instance", () => {
 
     const edges = new Set([]);
     const newEdge = ["foo", "bar"];
-    const graph = new Graph(["lifeCycleMock"], new Map(), edges);
+    const graph = new Graph({}, {}, new Map(), edges);
 
     it("should return the meta data of the specified vertex", () => {
 
@@ -219,7 +226,7 @@ describe("The \"addEdge\" method of the \"graph\" instance", () => {
 
     const edges = new Set([["foo", "bar"]]);
     const newEdge = ["foo", "bar"];
-    const graph = new Graph(["lifeCycleMock"], new Map(), edges);
+    const graph = new Graph({}, {}, new Map(), edges);
 
     it("should throw a \"Duplicated edge\" error", () => {
       expect(() => graph.addEdge(newEdge)).to.throw(Error, "Duplicated edge");
@@ -228,6 +235,19 @@ describe("The \"addEdge\" method of the \"graph\" instance", () => {
 });
 
 describe("The \"getAdjacentVertexes\" method of the \"graph\" instance", () => {
+
+  const modifiersMock = {
+    "factory": {
+      chop() {
+        return "a";
+      }
+    },
+    "optional": {
+      chop() {
+        return "a";
+      }
+    }
+  };
 
   describe("when it's executed", () => {
 
@@ -253,11 +273,113 @@ describe("The \"getAdjacentVertexes\" method of the \"graph\" instance", () => {
       }]
     ]);
     const edges = new Set([["a", "b"], ["a", "c"]]);
-    const graph = new Graph(["lifeCycleMock"], vertexes, edges);
+    const graph = new Graph({}, modifiersMock, vertexes, edges);
 
     it("should return the adjacent vertexes of the given vertex as a Map", () => {
 
       const adjacentVertexes = graph.getAdjacentVertexes("a");
+
+      expect(adjacentVertexes).to.deep.equal(new Set(["b", "c"]));
+    });
+  });
+
+  describe("when it's executed with a factorized vertex name", () => {
+
+    class RootA {}
+    class LeafB {}
+    class LeafC {}
+
+    const vertexes = new Map([
+      ["a", {
+        "vertex": RootA,
+        "lifeCycle": "lifeCycleMock",
+        "type": "class"
+      }],
+      ["b", {
+        "vertex": LeafB,
+        "lifeCycle": "lifeCycleMock",
+        "type": "class"
+      }],
+      ["c", {
+        "vertex": LeafC,
+        "lifeCycle": "lifeCycleMock",
+        "type": "class"
+      }]
+    ]);
+    const edges = new Set([["a", "b"], ["a", "c"]]);
+    const graph = new Graph({}, modifiersMock, vertexes, edges);
+
+    it("should return the adjacent vertexes of the given vertex as a Map", () => {
+
+      const adjacentVertexes = graph.getAdjacentVertexes("aFactory");
+
+      expect(adjacentVertexes).to.deep.equal(new Set(["b", "c"]));
+    });
+  });
+
+  describe("when it's executed with an optional vertex name", () => {
+
+    class RootA {}
+    class LeafB {}
+    class LeafC {}
+
+    const vertexes = new Map([
+      ["a", {
+        "vertex": RootA,
+        "lifeCycle": "lifeCycleMock",
+        "type": "class"
+      }],
+      ["b", {
+        "vertex": LeafB,
+        "lifeCycle": "lifeCycleMock",
+        "type": "class"
+      }],
+      ["c", {
+        "vertex": LeafC,
+        "lifeCycle": "lifeCycleMock",
+        "type": "class"
+      }]
+    ]);
+    const edges = new Set([["a", "b"], ["a", "c"]]);
+    const graph = new Graph({}, modifiersMock, vertexes, edges);
+
+    it("should return the adjacent vertexes of the given vertex as a Map", () => {
+
+      const adjacentVertexes = graph.getAdjacentVertexes("a?");
+
+      expect(adjacentVertexes).to.deep.equal(new Set(["b", "c"]));
+    });
+  });
+
+  describe("when it's executed with a factorized and an optional vertex name", () => {
+
+    class RootA {}
+    class LeafB {}
+    class LeafC {}
+
+    const vertexes = new Map([
+      ["a", {
+        "vertex": RootA,
+        "lifeCycle": "lifeCycleMock",
+        "type": "class"
+      }],
+      ["b", {
+        "vertex": LeafB,
+        "lifeCycle": "lifeCycleMock",
+        "type": "class"
+      }],
+      ["c", {
+        "vertex": LeafC,
+        "lifeCycle": "lifeCycleMock",
+        "type": "class"
+      }]
+    ]);
+    const edges = new Set([["a", "b"], ["a", "c"]]);
+    const graph = new Graph({}, modifiersMock, vertexes, edges);
+
+    it("should return the adjacent vertexes of the given vertex as a Map", () => {
+
+      const adjacentVertexes = graph.getAdjacentVertexes("aFactory?");
 
       expect(adjacentVertexes).to.deep.equal(new Set(["b", "c"]));
     });

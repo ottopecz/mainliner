@@ -1,5 +1,5 @@
 const {expect} = require("chai");
-const lifeCycles = require("../lib/LifeCycles");
+const lifeCycles = require("../lib/lifeCycles");
 
 describe("The \"lifeCycles\" object", () => {
 

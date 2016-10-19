@@ -6,12 +6,18 @@ module.exports = function(grunt) {
   grunt.initConfig({
     "mochaTest": {
       "test": {
+        // "options": {
+        //   "reporter": "spec",
+        //   "captureFile": "test_results.txt",
+        //   "quiet": false,
+        //   "clearRequireCache": false,
+        //   "noFail": false
+        // },
         "options": {
           "reporter": "spec",
           "captureFile": "test_results.txt",
           "quiet": false,
-          "clearRequireCache": false,
-          "noFail": false
+          "timeout": 2000
         },
         "src": ["test-lib/**/*.spec.js"]
       }
