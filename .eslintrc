@@ -49,7 +49,7 @@
 
     "accessor-pairs": 2,                        // - Enforces getter/setter pairs in objects
     "block-scoped-var": 0,                      // - treat var statements as if they were block scoped
-    "complexity": [1, 11],                       // - specify the maximum cyclomatic complexity allowed in a program
+    "complexity": [1, 15],                       // - specify the maximum cyclomatic complexity allowed in a program
     "consistent-return": 0,                     // - require return statements to either always or never specify values
     "curly": [2,  "all"],                       // - specify curly brace conventions for all control statements
     "default-case": 0,                          // - require default case in switch statements

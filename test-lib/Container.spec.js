@@ -339,6 +339,76 @@ describe("The \"get\" method of the container instance", () => {
     });
   });
 
+  describe("when it's executed on function vertex", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    it("should return whatever the function returns", () => {
+
+      function one() {
+        return "whatOneReturns";
+      }
+
+      container.register("one", one);
+      expect(container.get("one")).to.be.equal("whatOneReturns");
+    });
+  });
+
+  describe("when it's executed on vertex which has a function dependency", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    it("should inject whatever the function dependency return", () => {
+
+      function two() {
+        return "whatTwoReturns";
+      }
+
+      function one(twoResult) {
+        expect(twoResult).to.equal("whatTwoReturns");
+        return "whatOneReturns";
+      }
+      one.$inject = ["two"];
+
+      container.register("one", one);
+      container.register("two", two);
+      expect(container.get("one")).to.be.equal("whatOneReturns");
+    });
+  });
+
+  describe("when it's executed on a passThrough vertex", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    it("should return the passThrough dependency", () => {
+
+      const one = {"foo": "bar"};
+
+      container.register("one", one);
+      expect(container.get("one")).to.be.equal(one);
+    });
+  });
+
+  describe("when it's executed on a vertex which has passThrough dependency", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    it("should inject the passThrough dependency", () => {
+
+      const two = {"foo": "bar"};
+
+      function one(twoInject) {
+        expect(twoInject).to.equal(two);
+        return "whatOneReturns";
+      }
+      one.$inject = ["two"];
+
+      container.register("one", one);
+      container.register("two", two);
+      container.get("one");
+    });
+  });
+
   describe("when it's executed \"cycled\" dependency graph", () => {
 
     const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
@@ -655,6 +725,54 @@ describe("The \"get\" method of the container instance", () => {
       container.register("one", One);
 
       container.get("one");
+    });
+  });
+
+  describe("when it's executed on a class vertex with an additional parameter", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    it("should overload the constructor with that parameter", () => {
+
+      const extraParam = {"foo": "bar"};
+
+      class Two {}
+
+      class One {
+        constructor(two, overload) {
+          expect(overload).to.equal(extraParam)
+        }
+        static get $inject() {
+          return ["two"];
+        }
+      }
+
+      container.register("one", One);
+      container.register("two", Two);
+
+      container.get("one", extraParam);
+    });
+  });
+
+  describe("when it's executed on a function vertex with an additional parameter", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    it("should overload the function with that parameter", () => {
+
+      const extraParam = {"foo": "bar"};
+
+      class Two {}
+
+      function one(two, overload) {
+        expect(overload).to.equal(extraParam);
+      }
+      one.$inject = ["two"];
+
+      container.register("one", one);
+      container.register("two", Two);
+
+      container.get("one", extraParam);
     });
   });
 });
