@@ -10,7 +10,7 @@ module.exports = function(grunt) {
           "reporter": "spec",
           "captureFile": "test_results.txt",
           "quiet": false,
-          "clearRequireCache": false,
+          "clearRequireCache": true,
           "noFail": false
         },
         "src": ["test-lib/**/*.spec.js"]
