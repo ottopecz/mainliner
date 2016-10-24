@@ -7,6 +7,7 @@
     "node": ">=6.0.0"
   },
   "scripts": {
+    "pretest": "./node_modules/.bin/grunt eslint",
     "test": "./node_modules/.bin/grunt mochaTest"
   },
   "repository": {
