@@ -1,17 +1,17 @@
 {
   "name": "solid-waddle",
   "version": "1.0.0",
-  "description": "dependency injection for node",
+  "description": "ioc and dependency injection for node",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/grunt mochaTest"
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/ottopecz/solid-waddle.git"
   },
   "keywords": [
-    "node",
+    "ioc",
     "dependency",
     "injection"
   ],
