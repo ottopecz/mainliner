@@ -13,9 +13,9 @@ Differences between **mainliner** and intravenous
 
 **mainliner** can deal with 3 kinds of things
 
-1. class - It will be instantiated and the instance will be injected
-2. function - It will be executed and whatever it returns will be injected
-3. passthrough - Anything which is not a class or a function will be injected as it is
+1. **class** - It will be instantiated and the instance will be injected
+2. **function** - It will be executed and whatever it returns will be injected
+3. **passthrough** - Anything which is not a class or a function will be injected as it is
 
 ##Getting started
 First install it: `npm install mainliner`
