@@ -6,11 +6,13 @@ Inversion of control container and dependency injector for node6.
 
 The inspiration is the excellent [intravenous](github.com/RoyJacobs/intravenous) which seems to be abandoned. All the interfaces of [intravenous](github.com/RoyJacobs/intravenous) reimplemented from scratch in node6. With some exceptions...
 
-Differences between mainliner and intravenous:
-1. mainliner supports native classes. Yay!!!
-2. You cannot dispose anything with mainliner(yet). Boo!!! Hence there are no sub-containers.
+Differences between **mainliner** and intravenous
 
-mainliner can deal with 3 kinds of things
+1. **mainliner** supports native classes. Yay!!!
+2. You cannot dispose anything with **mainliner**(yet). Boo!!! Hence there are no sub-containers.
+
+**mainliner** can deal with 3 kinds of things
+
 1. class - It will be instantiated and the instance will be injected
 2. function - It will be executed and whatever it returns will be injected
 3. passthrough - Anything which is not a class or a function will be injected as it is
@@ -155,10 +157,11 @@ assert.ok(myThing instanceof MyClass);
 ```
 
 ##Life cycles
-You can define the lifec cycle of an instance (so it works only for classes). There are three life cycles.
-1. perRequest - The default life cycle of an instance. If you don't specify anything upon registration your instance will be a "perRequest" one. A request means one execution of the "get" method of the container. If the same class is accessed more times upon a request the instance will be created just once. So the same instance will injected multiple times.
-2. singleton - The instance will be created only once no matter how many requests you make.
-3. unique - The instance will be created every single time the class is accessed. No matter how many requests you make
+You can define the life cycle of an instance (so it works only for classes). There are three life cycles.
+
+1. **perRequest** - The default life cycle of an instance. If you don't specify anything upon registration your instance will be a "perRequest" one. A request means one execution of the "get" method of the container. If the same class is accessed more times upon a request the instance will be created just once. So the same instance will injected multiple times.
+2. **singleton** - The instance will be created only once no matter how many requests you make.
+3. **unique** - The instance will be created every single time the class is accessed. No matter how many requests you make
 
 ####perRequest
 ```javascript
