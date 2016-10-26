@@ -1,7 +1,7 @@
 {
   "name": "mainliner",
   "version": "1.0.0",
-  "description": "ioc and dependency injection for node",
+  "description": "inversion of control (ioc) container and dependency injection for node6",
   "main": "./lib/index.js",
   "files": ["lib"],
   "engines": {
@@ -16,6 +16,7 @@
     "url": "git+ssh://git@github.com/ottopecz/solid-waddle.git"
   },
   "keywords": [
+    "inversion of control",
     "ioc",
     "dependency",
     "injection"
@@ -23,9 +24,9 @@
   "author": "Otto Pecz <otto.pecz@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ottopecz/solid-waddle/issues"
+    "url": "https://github.com/ottopecz/mainliner/issues"
   },
-  "homepage": "https://github.com/ottopecz/solid-waddle#readme",
+  "homepage": "https://github.com/ottopecz/mainliner#readme",
   "devDependencies": {
     "chai": "^3.5.0",
     "eslint": "^3.8.0",
