@@ -24,28 +24,28 @@ const assert = require("assert");
 const mainliner = require("mainliner");
 
 // Dependencies
-class DoesSomethingThingForMe {}
-function returnsThingForMe() {return "otherThing";}
+class DoesSomeThingForMe {}
+function returnsThingForMe() {return "aThing";}
 const globalData = {"foo": "bar"};
 
 // My class
 class MyClass {
-  constructor(doesSomethingForMe, returnsThingForMe, gd) {
-    assert.ok(doesSomethingForMe instanceof DoesSomethingThingForMe);
-    assert.equal(returnsThingForMe, "otherThing");
+  constructor(doesSomethingForMe, returnedThing, gd) {
+    assert.ok(doesSomethingForMe instanceof DoesSomeThingForMe);
+    assert.equal(returnedThing, "aThing");
     assert.equal(gd, globalData);
   }
 }
 
 // Declare dependencies
-MyClass.$inject = ["doesSomethingForMe", "returnsThingForMe", "gd"];
+MyClass.$inject = ["doesSomethingForMe", "returnedThing", "gd"];
 
 // Create ioc container
 const container = mainliner.create();
 
 // Register everything you need
-container.register("doesSomethingForMe", DoesSomethingThingForMe);
-container.register("returnsThingForMe", returnsThingForMe);
+container.register("doesSomethingForMe", DoesSomeThingForMe);
+container.register("returnedThing", returnsThingForMe);
 container.register("gd", globalData);
 container.register("myThing", MyClass);
 
