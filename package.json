@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "ioc and dependency injection for node",
   "main": "./lib/index.js",
+  "files": ["lib"],
   "engines": {
     "node": ">=6.0.0"
   },

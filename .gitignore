@@ -1,6 +1,5 @@
 node_modules/
 test_results.txt
-coverage.html
 npm-debug.log
 .*.swp
 ._*
