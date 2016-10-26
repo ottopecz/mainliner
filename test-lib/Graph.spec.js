@@ -182,19 +182,23 @@ describe("The \"getVertexData\" method of the \"graph\" instance", () => {
     class FooVertex {}
     class BarVertex {}
 
+    const barData = {
+      "vertex": BarVertex,
+      "lifeCycle": "lifeCycleMock",
+      "type": "class"
+    };
+
     const graph = new Graph({}, {}, new Map([["foo", {
       "vertex": FooVertex,
       "lifeCycle": "lifeCycleMock",
       "type": "class"
-    }], ["bar", {
-      "vertex": BarVertex,
-      "lifeCycle": "lifeCycleMock",
-      "type": "class"
-    }]]));
+    }], ["bar", barData]]));
 
-    it("should return the meta data of the specified vertex", () => {
+    it("should return the shallow copy of the meta data of the specified vertex", () => {
 
       const data = graph.getVertexData("bar");
+
+      barData.type = "something"; // Changing the source to be able to check if it's really a copy returned
 
       expect(data).to.deep.equal({
         "vertex": BarVertex,

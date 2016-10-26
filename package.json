@@ -1,8 +1,8 @@
 {
-  "name": "solid-waddle",
+  "name": "mainliner",
   "version": "1.0.0",
   "description": "ioc and dependency injection for node",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "engines": {
     "node": ">=6.0.0"
   },

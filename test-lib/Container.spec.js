@@ -355,6 +355,29 @@ describe("The \"get\" method of the container instance", () => {
     });
   });
 
+  describe("when it's executed on factorized vertex", () => {
+
+    const graph = new Graph(lifeCycles, modifiers);
+    const container = new Container(graph, modifiers);
+
+    it("should not change the type of the vertex - BUGFIX", () => {
+
+      class One {}
+
+      container.register("one", One);
+
+      const vertexDataBefore = graph.getVertexData("one");
+
+      expect(vertexDataBefore.type).to.equal("class"); // Checking before the act
+
+      container.get("oneFactory");
+
+      const vertexDataAfter = graph.getVertexData("one");
+
+      expect(vertexDataAfter.type).to.equal("class"); // Checking after the act
+    });
+  });
+
   describe("when it's executed on function vertex", () => {
 
     const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
