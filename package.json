@@ -16,6 +16,7 @@
     "url": "git+ssh://git@github.com/ottopecz/solid-waddle.git"
   },
   "keywords": [
+    "intravenous",
     "inversion of control",
     "ioc",
     "dependency",

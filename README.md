@@ -4,21 +4,53 @@
 
 Inversion of control container and dependency injector for node6.
 
+With **mainliner** you can create ioc containers. You can register your classes, functions and other things on the container. When you are accessing a class, **mainliner** is going to create the instance for you. If you defined dependencies for the class they will also be instantiated recursively. You can also manage the life cycle of the instances. You can just tell **mainliner** which instance is supposed to be a generic singleton, a singleton per request perhaps a unique.
 The inspiration is the excellent [intravenous](github.com/RoyJacobs/intravenous) which seems to be abandoned. All the interfaces of [intravenous](github.com/RoyJacobs/intravenous) reimplemented from scratch in node6. With some exceptions...
 
-Differences between **mainliner** and intravenous
+Differences between **mainliner** and **intravenous**
 
 1. **mainliner** supports native classes. Yay!!!
 2. You cannot dispose anything with **mainliner**(yet). Boo!!! Hence there are no sub-containers.
 
-**mainliner** can deal with 3 kinds of things
+You can register 3 kinds of things on a **mainliner** container
 
-1. **class** - It will be instantiated and the instance will be injected
-2. **function** - It will be executed and whatever it returns will be injected
-3. **passthrough** - Anything which is not a class or a function will be injected as it is
+1. **class** - It will be instantiated and the instance will be returned/injected
+2. **function** - It will be executed and whatever it returns will be returned/injected
+3. **passthrough** - Anything which is not a class or a function will be returned/injected as it is
 
 ##Getting started
-First install it: `npm install mainliner`
+####Basics
+
+To install **mainliner**:
+```bash
+npm install mainliner
+```
+To import **mainliner**: 
+```javascript
+const mainliner = require("mainliner");
+```
+To create an ioc container: 
+```javascript
+const container = mainliner.create();
+```
+To register a class:
+```javascript
+class MyClass {}
+container.register("myThing", MyClass);
+```
+To get out the instance from the container: 
+```javascript
+const myThing = container.get("myThing")
+```
+To declare dependencies:
+```javascript
+class MyClass {
+  constructor(dependency);
+}
+MyClass = ["dependency"] 
+```
+
+####A working example (copy/paste it. It will just run.)
 ```javascript
 const assert = require("assert");
 const mainliner = require("mainliner");
