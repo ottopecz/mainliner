@@ -23,7 +23,7 @@ module.exports = function(grunt) {
     "babel": {
       "options": {
         "sourceMap": "inline",
-        "presets": ["es2016-node4"]
+        "presets": ["es2015-node4"]
       },
       "dist": {
         "files": [{
