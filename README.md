@@ -14,6 +14,7 @@ Differences between **mainliner** and **intravenous**
 1. **mainliner** supports native classes. Yay!!!
 2. You cannot dispose anything with **mainliner**(yet). Boo!!! Hence there are no sub-containers.
 
+
 You can register 3 kinds of things on a **mainliner** container
 
 1. **class** - It will be instantiated and the instance will be returned/injected
@@ -47,7 +48,7 @@ const myThing = container.get("myThing")
 To declare dependencies:
 ```javascript
 class MyClass {
-  constructor(dependency);
+  constructor(dependency) {};
 }
 MyClass.$inject = ["dependency"] 
 ```
