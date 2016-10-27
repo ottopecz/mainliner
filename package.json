@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "inversion of control (ioc) container and dependency injection for node6",
   "main": "./lib/index.js",
-  "files": ["lib"],
+  "files": [
+    "node4-lib",
+    "lib"
+  ],
   "engines": {
     "node": ">=6.0.0"
   },
@@ -13,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/ottopecz/solid-waddle.git"
+    "url": "git+ssh://git@github.com/ottopecz/mainliner.git"
   },
   "keywords": [
     "intravenous",
@@ -29,10 +32,12 @@
   },
   "homepage": "https://github.com/ottopecz/mainliner#readme",
   "devDependencies": {
+    "babel-preset-es2016-node4": "^6.0.1",
     "chai": "^3.5.0",
     "eslint": "^3.8.0",
     "esprima": "^3.1.0",
     "grunt": "^1.0.1",
+    "grunt-babel": "^6.0.0",
     "grunt-eslint": "^19.0.0",
     "grunt-mocha-test": "^0.13.2",
     "mocha": "^3.1.2"

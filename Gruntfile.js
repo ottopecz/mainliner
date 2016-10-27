@@ -2,6 +2,7 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks("grunt-mocha-test");
   grunt.loadNpmTasks("grunt-eslint");
+  grunt.loadNpmTasks("grunt-babel");
 
   grunt.initConfig({
     "mochaTest": {
@@ -18,8 +19,23 @@ module.exports = function(grunt) {
     },
     "eslint": {
       "target": ["lib/**/*.js", "test-lib/**/*.spec.js"]
+    },
+    "babel": {
+      "options": {
+        "sourceMap": "inline",
+        "presets": ["es2016-node4"]
+      },
+      "dist": {
+        "files": [{
+          "expand": true,
+          "cwd": "lib/",
+          "src": ["**/*.js"],
+          "dest": "node4-lib/",
+          "ext": ".js"
+        }]
+      }
     }
   });
 
-  grunt.registerTask("default", ["eslint", "mochaTest"]);
+  grunt.registerTask("default", ["eslint", "babel", "mochaTest"]);
 };
