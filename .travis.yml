@@ -3,5 +3,4 @@ node_js:
   - "6"
 script:
   - ./node_modules/.bin/grunt eslint
-  - ./node_modules/.bin/grunt babel
   - ./node_modules/.bin/grunt mochaTest
