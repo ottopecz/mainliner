@@ -129,11 +129,16 @@ const assert = require("assert");
 const mainliner = require("mainliner");
 
 // Dependencies
+const globalData = {"foo": "bar"};
 class DoesSomethingThingForMe {
-  constructor(param) {
+  constructor(gd, param) {
+    assert.equal(gd, globalData);
     assert.equal(param, "factoryParam");
   }
 }
+
+// Declare dependencies
+DoesSomethingThingForMe.$inject = ["globalData"];
 
 // My class
 class MyClass {
@@ -150,6 +155,7 @@ MyClass.$inject = ["doesSomethingForMeFactory"];
 const container = mainliner.create();
 
 // Register everything you need
+container.register("globalData", globalData);
 container.register("doesSomethingForMe", DoesSomethingThingForMe);
 container.register("myThing", MyClass);
 
