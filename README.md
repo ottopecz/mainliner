@@ -91,7 +91,7 @@ assert.ok(myThing instanceof MyClass);
 ```
 
 ##Advanced usage
-####Pass an extra parameter
+####Pass extra parameters
 ```javascript
 const assert = require("assert");
 const mainliner = require("mainliner");
