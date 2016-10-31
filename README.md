@@ -101,9 +101,10 @@ const globalData = {"foo": "bar"};
 
 // My class
 class MyClass {
-  constructor(gd, extraParam) {
+  constructor(gd, extraParam1, extraParam2) {
     assert.equal(gd, globalData);
-    assert.equal(extraParam, "extraParam");
+    assert.equal(extraParam1, "extraParam1");
+    assert.equal(extraParam2, "extraParam2");
   }
 }
 
@@ -118,10 +119,11 @@ container.register("gd", globalData);
 container.register("myThing", MyClass);
 
 // Get your thing out of the container
-const myThing = container.get("myThing", "extraParam");
+const myThing = container.get("myThing", "extraParam1", "extraParam2");
 
 assert.ok(myThing instanceof MyClass);
 ```
+
 ####Creating instances runtime
 You can factorize a class - Only a class - by appending suffix "Factory" to it's registered name. If you do so the injector will inject an object which has a get method which will instantiate the class for you anytime you want
 ```javascript
@@ -131,9 +133,10 @@ const mainliner = require("mainliner");
 // Dependencies
 const globalData = {"foo": "bar"};
 class DoesSomethingThingForMe {
-  constructor(gd, param) {
+  constructor(gd, param1, param2) {
     assert.equal(gd, globalData);
-    assert.equal(param, "factoryParam");
+    assert.equal(param1, "factoryParam1");
+    assert.equal(param2, "factoryParam2");
   }
 }
 
@@ -143,7 +146,7 @@ DoesSomethingThingForMe.$inject = ["globalData"];
 // My class
 class MyClass {
   constructor(doesSomethingForMeFactory) {
-    const instance = doesSomethingForMeFactory.get("factoryParam");
+    const instance = doesSomethingForMeFactory.get("factoryParam1", "factoryParam2");
     assert.ok(instance instanceof DoesSomethingThingForMe);
   }
 }
