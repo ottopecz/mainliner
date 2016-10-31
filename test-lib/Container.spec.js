@@ -121,6 +121,80 @@ describe("The \"get\" method of the container instance", () => {
     });
   });
 
+  describe("when it's executed and a class vertex has been registered", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    class One {}
+    container.register("one", One);
+
+    it("should return the instance of the class", () => {
+      expect(container.get("one")).to.be.an.instanceOf(One);
+    });
+  });
+
+  describe("when it's executed with extra parameters and a class vertex has been registered", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    it("should return the instance of the class", () => {
+
+      class One {
+        constructor(dep1, dep2) {
+          expect(dep1).to.equal("foo");
+          expect(dep2).to.equal("bar");
+        }
+      }
+      container.register("one", One);
+
+      expect(container.get("one", "foo", "bar")).to.be.an.instanceOf(One);
+    });
+  });
+
+  describe("when it's executed and a function vertex has been registered", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    function one() {
+      return "foo";
+    }
+    container.register("one", one);
+
+    it("should return the instance of the class", () => {
+      expect(container.get("one")).to.equal("foo");
+    });
+  });
+
+
+  describe("when it's executed with extra parameters and a function vertex has been registered", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+
+    it("should return the instance of the class", () => {
+
+      function one(dep1, dep2) {
+        expect(dep1).to.equal("foo");
+        expect(dep2).to.equal("bar");
+        return "foo";
+      }
+      container.register("one", one);
+
+      expect(container.get("one", "foo", "bar")).to.equal("foo");
+    });
+  });
+
+  describe("when it's executed and a passthrough vertex has been registered", () => {
+
+    const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+    const globalData = {"foo": "bar"};
+
+    container.register("one", globalData);
+
+    it("should return the instance of the class", () => {
+      expect(container.get("one")).to.equal(globalData);
+    });
+  });
+
   describe("when it's executed on a \"straight\" dependency graph", () => {
 
     const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
