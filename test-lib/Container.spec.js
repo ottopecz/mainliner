@@ -773,13 +773,15 @@ describe("The \"get\" method of the container instance", () => {
 
     it("should overload the constructor with that parameter", () => {
 
-      const extraParam = {"foo": "bar"};
+      const extraParam1 = "foo";
+      const extraParam2 = "bar";
 
       class Two {}
 
       class One {
-        constructor(two, overload) {
-          expect(overload).to.equal(extraParam);
+        constructor(two, overLoad1, overLoad2) {
+          expect(overLoad1).to.equal(extraParam1);
+          expect(overLoad2).to.equal(extraParam2);
         }
         static get $inject() {
           return ["two"];
@@ -789,7 +791,7 @@ describe("The \"get\" method of the container instance", () => {
       container.register("one", One);
       container.register("two", Two);
 
-      container.get("one", extraParam);
+      container.get("one", extraParam1, extraParam2);
     });
   });
 
@@ -799,19 +801,21 @@ describe("The \"get\" method of the container instance", () => {
 
     it("should overload the function with that parameter", () => {
 
-      const extraParam = {"foo": "bar"};
+      const extraParam1 = "foo";
+      const extraParam2 = "bar";
 
       class Two {}
 
-      function one(two, overload) {
-        expect(overload).to.equal(extraParam);
+      function one(two, overLoad1, overLoad2) {
+        expect(overLoad1).to.equal(extraParam1);
+        expect(overLoad2).to.equal(extraParam2);
       }
       one.$inject = ["two"];
 
       container.register("one", one);
       container.register("two", Two);
 
-      container.get("one", extraParam);
+      container.get("one", extraParam1, extraParam2);
     });
   });
 });
