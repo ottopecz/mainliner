@@ -1,7 +1,7 @@
 {
   "name": "mainliner",
   "version": "1.2.1",
-  "description": "inversion of control (ioc) container and dependency injection for node6",
+  "description": "inversion of control (ioc) container and dependency injection for node6 spiced with trait composition",
   "main": "./lib/index.js",
   "files": [
     "node4-lib",
@@ -23,7 +23,11 @@
     "inversion of control",
     "ioc",
     "dependency",
-    "injection"
+    "injection",
+    "dependency injection",
+    "trait",
+    "composition",
+    "trait composition"
   ],
   "author": "Otto Pecz <otto.pecz@gmail.com>",
   "license": "MIT",
