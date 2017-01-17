@@ -147,12 +147,13 @@ describe("The \"get\" method of the container instance", () => {
           const talent = Composer.createTalent({
             talentMethod() {}
           });
+
           class One {}
           One.$compose = ["talent"];
           container.register("talent", talent);
           container.register("one", One);
 
-          it("should extend the returned instance with the specified traits", () => {
+          it("should extend the returned instance with the specified talent", () => {
 
             const oneInstance = container.get("one");
 
@@ -161,7 +162,36 @@ describe("The \"get\" method of the container instance", () => {
           });
         });
 
-        describe.only("a function as intended talent", () => {
+        describe("multiple talents", () => {
+
+          const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+          const talent1 = Composer.createTalent({
+            talentMethod1() {}
+          });
+          const talent2 = Composer.createTalent({
+            talentMethod2() {}
+          });
+
+          class One {
+            func() {}
+          }
+          One.$compose = ["talent1", "talent2"];
+          container.register("talent1", talent1);
+          container.register("talent2", talent2);
+          container.register("one", One);
+
+          it("should extend the returned instance with the specified talents", () => {
+
+            const oneInstance = container.get("one");
+
+            expect(oneInstance).to.have.property("talentMethod1").that.is.a("function");
+            expect(oneInstance).to.have.property("talentMethod2").that.is.a("function");
+            expect(oneInstance.talentMethod1).to.be.be.deep.equal(talent1.talentMethod1);
+            expect(oneInstance.talentMethod2).to.be.be.deep.equal(talent2.talentMethod2);
+          });
+        });
+
+        describe("a function as intended talent", () => {
 
           const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
@@ -178,210 +208,54 @@ describe("The \"get\" method of the container instance", () => {
           });
         });
 
-        describe("a function trait but the trait is not registered", () => {
+        describe("a talent but the talent is not registered", () => {
 
           const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
           class One {}
-          One.$compose = ["trait"];
-          // The trait is not registered
+          One.$compose = ["talent"];
+          // The talent is not registered
           container.register("one", One);
 
           it("should throw an error", () => {
 
-            expect(() => container.get("one")).to.throw(Error, "The trait \"trait\" is not registered");
+            expect(() => container.get("one")).to.throw(Error, "The talent \"talent\" is not registered");
           });
         });
 
-        describe("a function trait but a conflict occurs on composition", () => {
+        describe("a talent but the compose list is not an array", () => {
 
           const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+          const talent = Composer.createTalent({
+            talentMethod() {}
+          });
 
-          function func() {}
-          class One {
-            func() {}
-          }
-          One.$compose = ["trait"];
-          container.register("trait", func);
+          class One {}
+          One.$compose = "talent"; // not an array
+          container.register("talent", talent);
           container.register("one", One);
 
-          it("should extend the returned instance with the specified traits", () => {
+          it("should throw an error", () => {
 
-            const oneInstance = container.get("one");
-
-            expect(() => oneInstance.func()).to.throw(Error, "The trait \"func\" is conflicted");
-            expect(() => {
-              oneInstance.func = function method() {};
-            }).to.throw(Error, "The trait \"func\" is conflicted");
+            expect(() => container.get("one")).to.throw(Error, "The \"$compose\" list should be an array of strings");
           });
         });
-      });
 
-      describe("which has a class dependency", () => {
+        describe("a talent but the compose list is not an array of strings", () => {
 
-        describe("and the class dependency is supposed to be composed with", () => {
-
-          describe("a class trait", () => {
-
-            const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
-
-            it("should extend the injected instance with the specified traits", () => {
-
-              class Trait {
-                traitMethod() {
-                  return this;
-                }
-              }
-              class Two {}
-              Two.$compose = ["trait"];
-              class One {
-                constructor(two) {
-
-                  expect(two).to.have.property("traitMethod").that.is.a.function;
-                  expect(two.traitMethod()).to.be.an.instanceOf(Two);
-                }
-              }
-              One.$inject = ["two"];
-              container.register("trait", Trait);
-              container.register("two", Two);
-              container.register("one", One);
-
-              container.get("one");
-            });
+          const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+          const talent = Composer.createTalent({
+            talentMethod() {}
           });
 
-          describe("a class trait but the trait is not registered", () => {
+          class One {}
+          One.$compose = [talent]; // not an array of strings
+          container.register("talent", talent);
+          container.register("one", One);
 
-            const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+          it("should throw an error", () => {
 
-            class Two {}
-            Two.$compose = ["trait"];
-            class One {
-              constructor(two) {
-
-                expect(two).to.have.property("traitMethod").that.is.a.function;
-                expect(two.traitMethod()).to.be.an.instanceOf(Two);
-              }
-            }
-            One.$inject = ["two"];
-            // The trait is not registered
-            container.register("two", Two);
-            container.register("one", One);
-
-            it("should throw an error", () => {
-
-              expect(() => container.get("one")).to.throw(Error, "The trait \"trait\" is not registered");
-            });
-          });
-
-          describe("a class trait but a conflict occurs on composition", () => {
-
-            const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
-
-            it("should handle the conflict explicitly", () => {
-
-              class Trait {
-                method() {
-                  return this;
-                }
-              }
-              class Two {
-                method() {
-                  return this;
-                }
-              }
-              Two.$compose = ["trait"];
-              class One {
-                constructor(two) {
-                  expect(() => two.method()).to.throw(Error, "The trait \"method\" is conflicted");
-                  expect(() => {
-                    two.method = function method() {};
-                  }).to.throw(Error, "The trait \"method\" is conflicted");
-                }
-              }
-              One.$inject = ["two"];
-              container.register("trait", Trait);
-              container.register("two", Two);
-              container.register("one", One);
-
-              container.get("one");
-            });
-          });
-
-          describe("a function trait", () => {
-
-            const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
-
-            it("should extend the returned instance with the specified traits", () => {
-
-              function trait() {
-
-                /* eslint-disable no-invalid-this */
-                return this;
-
-                /* eslint-enable no-invalid-this */
-              }
-              class Two {}
-              Two.$compose = ["trait"];
-              class One {
-                constructor(two) {
-                  expect(two).to.have.property("trait").that.is.a.function;
-                  expect(two.trait()).to.be.an.instanceOf(Two);
-                }
-              }
-              One.$inject = ["two"];
-              container.register("trait", trait);
-              container.register("two", Two);
-              container.register("one", One);
-
-              container.get("one");
-            });
-          });
-
-          describe("a function trait but the trait is not registered", () => {
-
-            const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
-
-            class Two {}
-            Two.$compose = ["trait"];
-            class One {}
-            One.$inject = ["two"];
-            // The trait is not registered
-            container.register("two", Two);
-            container.register("one", One);
-
-            it("should extend the returned instance with the specified traits", () => {
-
-              expect(() => container.get("one")).to.throw(Error, "The trait \"trait\" is not registered");
-            });
-          });
-
-          describe("a function trait but a conflict occurs on composition", () => {
-
-            const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
-
-            it("should extend the returned instance with the specified traits", () => {
-
-              function func() {}
-              class Two {
-                func() {}
-              }
-              Two.$compose = ["trait"];
-              class One {
-                constructor(two) {
-                  expect(() => two.func()).to.throw(Error, "The trait \"func\" is conflicted");
-                  expect(() => {
-                    two.func = function method() {};
-                  }).to.throw(Error, "The trait \"func\" is conflicted");
-                }
-              }
-              One.$inject = ["two"];
-              container.register("trait", func);
-              container.register("two", Two);
-              container.register("one", One);
-
-              container.get("one");
-            });
+            expect(() => container.get("one")).to.throw(Error, "The \"$compose\" list should be an array of strings");
           });
         });
       });
