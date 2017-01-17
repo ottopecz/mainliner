@@ -1,3 +1,4 @@
+const Composer = require("talentcomposer");
 const {expect} = require("chai");
 const lifeCycles = require("../lib/lifeCycles");
 const modifiers = require("../lib/modifiers");
@@ -140,95 +141,40 @@ describe("The \"get\" method of the container instance", () => {
 
       describe("and the class is supposed to be composed with", () => {
 
-        describe("a class trait", () => {
+        describe("a talent", () => {
 
           const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
-
-          class Trait {
-            traitMethod() {
-              return this;
-            }
-          }
+          const talent = Composer.createTalent({
+            talentMethod() {}
+          });
           class One {}
-          One.$compose = ["trait"];
-          container.register("trait", Trait);
+          One.$compose = ["talent"];
+          container.register("talent", talent);
           container.register("one", One);
 
           it("should extend the returned instance with the specified traits", () => {
 
             const oneInstance = container.get("one");
 
-            expect(oneInstance).to.have.property("traitMethod").that.is.a.function;
-            expect(oneInstance.traitMethod()).to.be.an.instanceOf(One);
+            expect(oneInstance).to.have.property("talentMethod").that.is.a("function");
+            expect(oneInstance.talentMethod).to.be.be.deep.equal(talent.talentMethod);
           });
         });
 
-        describe("a class trait but the trait is not registered", () => {
+        describe.only("a function as intended talent", () => {
 
           const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
+          function nonValidTalent() {}
           class One {}
-          One.$compose = ["trait"];
-          // The trait is not registered
+          One.$compose = ["nonValidTalent"];
+          container.register("nonValidTalent", nonValidTalent);
           container.register("one", One);
 
           it("should throw an error", () => {
 
-            expect(() => container.get("one")).to.throw(Error, "The trait \"trait\" is not registered");
-          });
-        });
-
-        describe("a class trait but a conflict occurs on composition", () => {
-
-          const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
-
-          class Trait {
-            method() {
-              return this;
-            }
-          }
-          class One {
-            method() {
-              return this;
-            }
-          }
-          One.$compose = ["trait"];
-          container.register("trait", Trait);
-          container.register("one", One);
-
-          it("should handle the conflict explicitly", () => {
-
-            const oneInstance = container.get("one");
-
-            expect(() => oneInstance.method()).to.throw(Error, "The trait \"method\" is conflicted");
-            expect(() => {
-              oneInstance.method = function method() {};
-            }).to.throw(Error, "The trait \"method\" is conflicted");
-          });
-        });
-
-        describe("a function trait", () => {
-
-          const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
-
-          function trait() {
-
-            /* eslint-disable no-invalid-this */
-            return this;
-
-            /* eslint-enable no-invalid-this */
-          }
-          class One {}
-          One.$compose = ["trait"];
-          container.register("trait", trait);
-          container.register("one", One);
-
-          it("should extend the returned instance with the specified traits", () => {
-
-            const oneInstance = container.get("one");
-
-            expect(oneInstance).to.have.property("trait").that.is.a.function;
-            expect(oneInstance.trait()).to.be.an.instanceOf(One);
+            expect(() => container.get("one"))
+              .to.throw("The talent \"nonValidTalent\" has to be a talent created by the \"#createTalent\" method");
           });
         });
 
