@@ -258,6 +258,81 @@ describe("The \"get\" method of the container instance", () => {
             expect(() => container.get("one")).to.throw(Error, "The \"$compose\" list should be an array of strings");
           });
         });
+
+        describe("a talent with explicit alias type conflict resolution", () => {
+
+          const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+          const talent = Composer.createTalent({
+            toRename1() {},
+            toRename2() {}
+          });
+
+          class One {}
+          One.$compose = ["talent : toRename1 > renamed1, toRename2 > renamed2"];
+          container.register("talent", talent);
+          container.register("one", One);
+
+          it("should apply the conflict resolutions and extend the instance", () => {
+
+            const oneInstance = container.get("one");
+
+            expect(oneInstance).to.have.property("renamed1").that.is.a("function");
+            expect(oneInstance).to.have.property("renamed2").that.is.a("function");
+            expect(oneInstance.renamed1).to.be.be.deep.equal(talent.toRename1);
+            expect(oneInstance.renamed2).to.be.be.deep.equal(talent.toRename2);
+          });
+        });
+
+        describe("a talent with explicit exclude type conflict resolution", () => {
+
+          const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+          const talent = Composer.createTalent({
+            toRemove1() {},
+            toRemove2() {}
+          });
+
+          class One {}
+          One.$compose = ["talent : toRemove1 -, toRemove2 -"];
+          container.register("talent", talent);
+          container.register("one", One);
+
+          it("should apply the conflict resolutions and extend the instance", () => {
+
+            const oneInstance = container.get("one");
+
+            expect(oneInstance).to.not.have.property("toRemove1");
+            expect(oneInstance).to.not.have.property("toRemove2");
+          });
+        });
+
+        describe("a talent with explicit alias and exclude type conflict resolution", () => {
+
+          const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
+          const talent = Composer.createTalent({
+            toRename1() {},
+            toRename2() {},
+            toRemove1() {},
+            toRemove2() {}
+          });
+
+          class One {}
+          One.$compose = ["talent : toRename1 > renamed1, toRename2 > renamed2, toRemove1 -, toRemove2 -"];
+          container.register("talent", talent);
+          container.register("one", One);
+
+          it("should apply the conflict resolutions and extend the instance", () => {
+
+            const oneInstance = container.get("one");
+
+            expect(oneInstance).to.have.property("renamed1").that.is.a("function");
+            expect(oneInstance).to.have.property("renamed2").that.is.a("function");
+            expect(oneInstance.renamed1).to.be.be.deep.equal(talent.toRename1);
+            expect(oneInstance.renamed2).to.be.be.deep.equal(talent.toRename2);
+
+            expect(oneInstance).to.not.have.property("toRemove1");
+            expect(oneInstance).to.not.have.property("toRemove2");
+          });
+        });
       });
     });
 

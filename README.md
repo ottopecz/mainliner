@@ -2,7 +2,7 @@
 
 # mainliner
 
-Inversion of control container and dependency injector for node6 spiced with trait composition.
+Inversion of control container and dependency injector for node6 spiced with [talent composition](http://scg.unibe.ch/archive/papers/Ress12eTalentsSPE.pdf).
 
 > **mainliner** is written in node6 and that's what is exported by default. However a node4 version is built using babel and it is included in the package. You can access it like `const mainliner = require("mainliner/node4-lib/index");` or if you are using es6 modules `import mainliner from "mainliner/node4-lib/index";`
 
@@ -13,7 +13,7 @@ Differences between **mainliner** and **intravenous**
 
 1. **mainliner** supports native classes. Yay!!!
 2. You cannot dispose anything with **mainliner**(yet). Boo!!! Hence there are no sub-containers.
-3. You can do basic composition with **mainliner** using traditional traits. 
+3. You can do basic composition with **mainliner** using talents. 
 
 
 You can register 3 kinds of things on a **mainliner** container
@@ -58,7 +58,7 @@ To declare basic composition
 class MyClass {
   constructor(dependency) {};
 }
-MyClass.$compose = ["traits"];
+MyClass.$compose = ["talent"];
 ```
 
 #### A working example (copy/paste it. It will just run.)
@@ -340,72 +340,179 @@ assert.ok(myThing instanceof Class1);
 ```
 
 ## Composition
-You can compose a class with other classes or standalone functions as traits. The foreign classes and functions need to be registered to be able to compose with them. The traits are gonna be merged on to the instance itself and not the prototype of the instance. Conflicts are handled explicitly which means that an error is gonna be thrown when you try to acces a conflicted method
-#### Composition with classes
-When you are composing with an other class you "copy over" all the methods and properties which are in the prototype of the class (except the constructor). The foreign class will not be instantiated.
+You can compose the instance of the class with registered talents. The methods of the talents are gonna be delegated on to the instance itself.
+#### Composition with talents
+Conflicts between methods of talents are supposed to be resolved explicitly using either aliasing or excluding. Conflicts between talents and the instance get resolved implicitly which means a talent method overrides an instance method automatically no mather what
 ```javascript
 const assert = require("assert");
 const mainliner = require("mainliner");
 
-// Class as a trait to compose with
-class Trait {
-  foreignInterface() {
-    return this; // To check what "this" points to runtime
+// My first talent
+const talent1 = mainliner.createTalent({
+  method1() {}
+});
+
+// My second talent
+const talent2 = mainliner.createTalent({
+  method2() {}
+});
+
+
+// My class
+class MyClass {}
+
+// Declare composition
+MyClass.$compose = ["talent1", "talent2"];
+
+// Create ioc container
+const container = mainliner.create();
+
+// Register everything you need
+container.register("talent1", talent1);
+container.register("talent2", talent2);
+container.register("myThing", MyClass);
+
+// Get your thing out of the container
+const myThing = container.get("myThing");
+
+assert.ok(myThing instanceof MyClass);
+
+// The instance has the foreign methods
+assert.ok(myThing.method1);
+assert.ok(myThing.method2);
+```
+#### Composition when a member is required
+You can mark a member as required both in the instance and in a talent. The member need to implemented/provided by an other talent
+```javascript
+const assert = require("assert");
+const mainliner = require("mainliner");
+
+// My talent
+const talent = mainliner.createTalent({
+  method2() {}
+});
+
+// My class
+class MyClass {
+  constructor() {
+    this.method2 = mainliner.required;
+  }
+  method1() {
+    this.method2();
   }
 }
 
-// My class
-class MyClass {}
-
 // Declare composition
-MyClass.$compose = ["trait"];
+MyClass.$compose = ["talent"];
 
 // Create ioc container
 const container = mainliner.create();
 
 // Register everything you need
-container.register("trait", Trait);
+container.register("talent", talent);
 container.register("myThing", MyClass);
 
 // Get your thing out of the container
 const myThing = container.get("myThing");
 
 assert.ok(myThing instanceof MyClass);
-assert.ok(myThing.foreignInterface); // The instance has the foreign method
-assert.ok(myThing.foreignInterface() instanceof MyClass); // The foreign method runs in the context of the instance
+
+// The instance has the foreign methods
+assert.ok(myThing.method1);
+assert.ok(myThing.method2);
+assert.deepEqual(myThing.method2, talent.method2);
 ```
-#### Composition with functions
-When you are composing with a standalone function you "copy over" the function
+
+#### Composition with explicit alias type conflict resolution between talents
+You can alias a conflicting method using a special notation in the compose list like: `$compose = ["talent: toRename > renamed"]`
 ```javascript
 const assert = require("assert");
 const mainliner = require("mainliner");
 
-// Function as a trait to compose with
-function foreign() {
-  return this; // To check what "this" points to runtime
-}
+// My first talent
+const talent1 = mainliner.createTalent({
+  method() {
+    console.log("talent1 method");
+  }
+});
+
+// My second talent
+const talent2 = mainliner.createTalent({
+  method() {
+    console.log("talent2 method");
+  }
+});
 
 // My class
 class MyClass {}
 
 // Declare composition
-MyClass.$compose = ["trait"];
+MyClass.$compose = ["talent1: method > renamed", "talent2"];
 
 // Create ioc container
 const container = mainliner.create();
 
 // Register everything you need
-container.register("trait", foreign);
+container.register("talent1", talent1);
+container.register("talent2", talent2);
 container.register("myThing", MyClass);
 
 // Get your thing out of the container
 const myThing = container.get("myThing");
 
 assert.ok(myThing instanceof MyClass);
-assert.ok(myThing.foreign); // The instance has the foreign function as method
-assert.ok(myThing.foreign() instanceof MyClass); // The foreign function as method runs in the context of the instance
+
+// The instance has the foreign methods
+assert.ok(myThing.method);
+assert.deepEqual(myThing.method, talent2.method);
+```
+
+#### Composition with explicit exclude type conflict resolution between talents
+You can alias a conflicting method using a special notation in the compose list like: `$compose = ["talent: toRemove -"]`
+```javascript
+const assert = require("assert");
+const mainliner = require("mainliner");
+
+// My first talent
+const talent1 = mainliner.createTalent({
+  method() {
+    console.log("talent1 method");
+  }
+});
+
+// My second talent
+const talent2 = mainliner.createTalent({
+  method() {
+    console.log("talent2 method");
+  }
+});
+
+// My class
+class MyClass {}
+
+// Declare composition
+MyClass.$compose = ["talent1: method-", "talent2"];
+
+// Create ioc container
+const container = mainliner.create();
+
+// Register everything you need
+container.register("talent1", talent1);
+container.register("talent2", talent2);
+container.register("myThing", MyClass);
+
+// Get your thing out of the container
+const myThing = container.get("myThing");
+
+assert.ok(myThing instanceof MyClass);
+
+// The instance has the foreign methods
+assert.ok(myThing.method);
+assert.deepEqual(myThing.method, talent2.method);
 ```
 
 
 ## Links
 Roy Jacobs' [intravenous](https://github.com/RoyJacobs/intravenous) and Mark Seeman's [blog](http://blog.ploeh.dk/)
+[Talents](http://scg.unibe.ch/archive/papers/Ress12eTalentsSPE.pdf) by the Software Composition Group part of the Institute of Computer Science (INF) at the University of Berne
+[Role orinted programming](https://en.wikipedia.org/wiki/Role-oriented_programming) on Wikipedia
