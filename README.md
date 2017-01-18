@@ -13,7 +13,7 @@ Differences between **mainliner** and **intravenous**
 
 1. **mainliner** supports native classes. Yay!!!
 2. You cannot dispose anything with **mainliner**(yet). Boo!!! Hence there are no sub-containers.
-3. You can do basic composition with **mainliner** using talents. 
+3. You can do composition with **mainliner** using talents. 
 
 
 You can register 3 kinds of things on a **mainliner** container
@@ -510,6 +510,11 @@ assert.ok(myThing instanceof MyClass);
 assert.ok(myThing.method);
 assert.deepEqual(myThing.method, talent2.method);
 ```
+
+#### Note on testing when you're doing software composition
+
+You might not want to use an ioc container when you're testing your thing. However I still recommend to write test for your composed instances. How? Download the tool wich works under the hood of mainliner and does the composition for you. It's called [talentcomposer](https://www.npmjs.com/package/talentcomposer) With this tool you can do the same compositions like you would do with mainliner. See the [readme](https://github.com/ottopecz/talentcomposer/blob/master/README.md) for the details.
+
 
 
 ## Links
