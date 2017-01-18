@@ -1,6 +1,6 @@
 {
   "name": "mainliner",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "inversion of control (ioc) container and dependency injection for node6 spiced with trait composition",
   "main": "./lib/index.js",
   "files": [
