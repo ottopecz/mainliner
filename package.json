@@ -51,6 +51,6 @@
     "mocha": "^3.1.2"
   },
   "dependencies": {
-    "talentcomposer": "^1.0.0"
+    "talentcomposer": "^1.0.2"
   }
 }
