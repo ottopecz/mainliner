@@ -8,3 +8,7 @@
 **Introducing talent composition** Asymmetric software composition with talents using [talentcomposer](https://www.npmjs.com/package/talentcomposer)
 ## v2.0.1 (18/01/2017)
 **Updating changelog and readme**
+## v2.0.2 (19/01/2017)
+**Updating readme**
+## v2.0.3 (19/01/2017)
+**Fixing readme**
