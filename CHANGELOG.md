@@ -12,5 +12,5 @@
 **Updating readme**
 ## v2.0.3 (19/01/2017)
 **Fixing readme**
-## v2.0.4 (23/01/2017)
+## v2.0.5 (23/01/2017)
 **Upgrading talentcomposer which can use talents from multiple sources**
