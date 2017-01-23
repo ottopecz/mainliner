@@ -1,4 +1,4 @@
-const Composer = require("talentcomposer");
+const Composer = require("talentcomposer/node4-lib/index");
 const {expect} = require("chai");
 const lifeCycles = require("../lib/lifeCycles");
 const modifiers = require("../lib/modifiers");
