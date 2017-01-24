@@ -14,3 +14,5 @@
 **Fixing readme**
 ## v2.0.5 (23/01/2017)
 **Upgrading talentcomposer which can use talents from multiple sources**
+## v2.0.6 (24/01/2017)
+**Upgrading talentcomposer. Going back to proper type check for talents. If using a talent created by an other installment of the package is necessary I recommend to recreate the talent using the Talent constructor. Like: `const copiedTalent = mainliner.createTalent(talent)`**
