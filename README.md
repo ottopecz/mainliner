@@ -381,8 +381,8 @@ assert.ok(myThing instanceof MyClass);
 assert.ok(myThing.method1);
 assert.ok(myThing.method2);
 ```
-#### Composition when a member is required
-You can mark a member as required both in the instance and in a talent. The member need to implemented/provided by an other talent
+#### Composition when a member is required in the constructor of a class
+You can mark a member as required in the constructor of a class. The member need to implemented/provided by a talent
 ```javascript
 const assert = require("assert");
 const mainliner = require("mainliner");
@@ -422,7 +422,47 @@ assert.ok(myThing.method1);
 assert.ok(myThing.method2);
 assert.deepEqual(myThing.method2, talent.method2);
 ```
+#### Composition when a member is required on the prototype of a class
+You can mark a member as required on the prototype of a class. The member need to implemented/provided by a talent
+```javascript
+const assert = require("assert");
+const mainliner = require("mainliner");
 
+// My talent
+const talent = mainliner.createTalent({
+  method2() {}
+});
+
+// My class
+class MyClass {
+  get method2() {
+    return mainliner.required;
+  }
+  method1() {
+    this.method2();
+  }
+}
+
+// Declare composition
+MyClass.$compose = ["talent"];
+
+// Create ioc container
+const container = mainliner.create();
+
+// Register everything you need
+container.register("talent", talent);
+container.register("myThing", MyClass);
+
+// Get your thing out of the container
+const myThing = container.get("myThing");
+
+assert.ok(myThing instanceof MyClass);
+
+// The instance has the foreign methods
+assert.ok(myThing.method1);
+assert.ok(myThing.method2);
+assert.deepEqual(myThing.method2, talent.method2);
+```
 #### Composition with explicit alias type conflict resolution between talents
 You can alias a conflicting method using a special notation in the compose list like: `$compose = ["talent: toRename > renamed"]`
 ```javascript
