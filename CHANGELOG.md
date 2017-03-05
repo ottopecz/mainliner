@@ -18,3 +18,5 @@
 **Upgrading talentcomposer.** Going back to proper type check for talents. If using a talent created by an other installment of the package is necessary I recommend to recreate the talent using the Talent constructor. Like: `const copiedTalent = mainliner.createTalent(talent)`
 ## v2.1.0 (31/01/2017)
 **Upgrading talentcomposer.** Making possible to declare a required member on the prototype of a class
+## v2.1.1 (05/03/2017)
+**Upgrading talentcomposer.** Refactoring for better encapsulation
