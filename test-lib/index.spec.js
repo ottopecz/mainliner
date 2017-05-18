@@ -1,4 +1,4 @@
-const Composer = require("talentcomposer/node4-lib/index");
+const Composer = require("talentcomposer");
 const {expect} = require("chai");
 const mainliner = require("../lib/index");
 const Container = require("../lib/Container");

@@ -40,17 +40,15 @@
   },
   "homepage": "https://github.com/ottopecz/mainliner#readme",
   "devDependencies": {
-    "babel-preset-es2015-node4": "^2.1.0",
     "chai": "^3.5.0",
     "eslint": "^3.8.0",
     "esprima": "^3.1.0",
     "grunt": "^1.0.1",
-    "grunt-babel": "^6.0.0",
     "grunt-eslint": "^19.0.0",
     "grunt-mocha-test": "^0.13.2",
     "mocha": "^3.1.2"
   },
   "dependencies": {
-    "talentcomposer": "^1.1.1"
+    "talentcomposer": "^2.0.0"
   }
 }
