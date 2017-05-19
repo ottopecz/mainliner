@@ -26,3 +26,5 @@
 **Adding badges** Adding dependency (david-dm.org) and npm badges
 ## v3.0.2 (19/05/2017)
 **Removing node4 build note from readme** The node4 build is no longer available so the corresponding note has to be removed
+## v3.0.3 (19/05/2017)
+**Fixing package.json** Fixing description in package.json 
