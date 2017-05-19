@@ -24,3 +24,5 @@
 **Upgrading talentcomposer. Removing node4 build** Removing node4 build from package. Also upgrading talentcomposer which node4 build was also removed
 ## v3.0.1 (19/05/2017)
 **Adding badges** Adding dependency (david-dm.org) and npm badges
+## v3.0.2 (19/05/2017)
+**Removing node4 build note from readme** The node4 build is no longer available so the corresponding note has to be removed
