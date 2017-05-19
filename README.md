@@ -6,8 +6,6 @@
 
 Inversion of control container and dependency injector for node6 spiced with [talent composition](http://scg.unibe.ch/archive/papers/Ress12eTalentsSPE.pdf).
 
-> **mainliner** is written in node6 and that's what is exported by default. However a node4 version is built using babel and it is included in the package. You can access it like `const mainliner = require("mainliner/node4-lib/index");` or if you are using es6 modules `import mainliner from "mainliner/node4-lib/index";`
-
 With **mainliner** you can create ioc containers. You can register your classes, functions and other things on the container. When you are accessing a class, **mainliner** is going to create the instance for you. If you defined dependencies for the class they will also be instantiated recursively. If you want you can even do basic composition with the interface of other classes and functions. You can also manage the life cycle of the instances. You can just tell **mainliner** which instance is supposed to be a generic singleton, a singleton per request perhaps a unique.
 The inspiration is the excellent [intravenous](github.com/RoyJacobs/intravenous) which seems to be abandoned. All the interfaces of [intravenous](github.com/RoyJacobs/intravenous) reimplemented from scratch in node6. With some exceptions...
 
