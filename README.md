@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/ottopecz/mainliner.svg?branch=master)](https://travis-ci.org/ottopecz/mainliner)
+[![Build Status](https://travis-ci.org/ottopecz/mainliner.svg?branch=master)](https://travis-ci.org/ottopecz/mainliner)[![Dependency status](https://david-dm.org/ottopecz/mainliner/status.svg)](https://david-dm.org/ottopecz/mainliner#info=dependencies) [![devDependency Status](https://david-dm.org/ottopecz/mainliner/dev-status.svg)](https://david-dm.org/ottopecz/mainliner#info=devDependencies)
+
+[![NPM](https://nodei.co/npm/mainliner.png?downloads=true)](https://www.npmjs.com/package/mainliner/)
 
 # mainliner
 
