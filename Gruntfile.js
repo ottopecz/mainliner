@@ -2,7 +2,6 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks("grunt-mocha-test");
   grunt.loadNpmTasks("grunt-eslint");
-  grunt.loadNpmTasks("grunt-babel");
 
   grunt.initConfig({
     "mochaTest": {
