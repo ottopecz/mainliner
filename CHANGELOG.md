@@ -20,5 +20,7 @@
 **Upgrading talentcomposer.** Making possible to declare a required member on the prototype of a class
 ## v2.1.1 (05/03/2017)
 **Upgrading talentcomposer.** Refactoring for better encapsulation
-## v2.1.1 (17/05/2017)
+## v3.0.0 (17/05/2017)
 **Upgrading talentcomposer. Removing node4 build** Removing node4 build from package. Also upgrading talentcomposer which node4 build was also removed
+## v3.0.1 (19/05/2017)
+**Adding badges** Adding dependency (david-dm.org) and npm badges
