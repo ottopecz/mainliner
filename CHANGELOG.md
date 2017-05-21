@@ -27,4 +27,6 @@
 ## v3.0.2 (19/05/2017)
 **Removing node4 build note from readme** The node4 build is no longer available so the corresponding note has to be removed
 ## v3.0.3 (19/05/2017)
-**Fixing package.json** Fixing description in package.json 
+**Fixing package.json** Fixing description in package.json
+## v3.0.4 (21/05/2017)
+**Adding test coverage badge** Adding test coverage (coveralls.io) badge
