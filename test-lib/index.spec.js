@@ -1,12 +1,17 @@
 const Composer = require("talentcomposer");
-const {expect} = require("chai");
+const {expect} = require("code");
+const Lab = require("lab");
 const mainliner = require("../lib/index");
 const Container = require("../lib/Container");
 
+const {describe, it} = exports.lab = Lab.script();
+
 describe("The index", () => {
 
-  it("should export \"mainliner\"", () => {
-    expect(mainliner).be.an.object;
+  it("should export \"mainliner\"", done => {
+
+    expect(mainliner).be.an.object();
+    done();
   });
 });
 
@@ -16,30 +21,34 @@ describe("The create method of the mainliner", () => {
 
     const container = mainliner.create();
 
-    it("should return a container", () => {
+    it("should return a container", done => {
+
       expect(container).to.be.an.instanceOf(Container);
+      done();
     });
   });
 });
 
 describe("The \"createTalent\" method", () => {
 
-  it("should be a delegation of \"Composer.createTalent\"", () => {
+  it("should be a delegation of \"Composer.createTalent\"", done => {
 
     const talent = mainliner.createTalent({
       method() {}
     });
 
-    expect(talent).to.be.an("object");
-    expect(talent).to.have.a.property("method");
-    expect(talent.method).to.deep.equal(talent.method);
+    expect(talent).to.be.an.object();
+    expect(talent).to.include("method");
+    expect(talent.method).to.equal(talent.method);
+    done();
   });
 });
 
 describe("The \"required\" property", () => {
 
-  it("should be a delegation of \"Composer.required\"", () => {
+  it("should be a delegation of \"Composer.required\"", done => {
 
-    expect(mainliner.required).to.be.deep.equal(Composer.required);
+    expect(mainliner.required).to.be.equal(Composer.required);
+    done();
   });
 });
