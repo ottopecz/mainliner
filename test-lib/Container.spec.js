@@ -1,9 +1,12 @@
 const Composer = require("talentcomposer");
-const {expect} = require("chai");
+const {expect} = require("code");
+const Lab = require("lab");
 const lifeCycles = require("../lib/lifeCycles");
 const modifiers = require("../lib/modifiers");
 const Graph = require("../lib/Graph");
 const Container = require("../lib/Container");
+
+const {describe, it} = exports.lab = Lab.script();
 
 describe("The \"container\" instance", () => {
 
@@ -11,8 +14,10 @@ describe("The \"container\" instance", () => {
 
     const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-    it("should be an instance of the Container class", () => {
+    it("should be an instance of the Container class", done => {
+
       expect(container).to.be.an.instanceOf(Container);
+      done();
     });
   });
 });
@@ -24,7 +29,7 @@ describe("The \"register\" method of the container instance", () => {
     const vertexes = new Map();
     const container = new Container(new Graph(lifeCycles, modifiers, vertexes), modifiers);
 
-    it("should register a new vertex", () => {
+    it("should register a new vertex", done => {
 
       class Foo {
         static get $inject() {
@@ -34,7 +39,8 @@ describe("The \"register\" method of the container instance", () => {
 
       container.register("foo", Foo);
 
-      expect(vertexes.has("foo")).to.be.true;
+      expect(vertexes.has("foo")).to.be.true();
+      done();
     });
   });
 
@@ -43,7 +49,7 @@ describe("The \"register\" method of the container instance", () => {
     const vertexes = new Map();
     const container = new Container(new Graph(lifeCycles, modifiers, vertexes), modifiers);
 
-    it("should throw an error", () => {
+    it("should throw an error", done => {
 
       class Foo {
         static get $inject() {
@@ -53,6 +59,7 @@ describe("The \"register\" method of the container instance", () => {
 
       expect(() => container.register("foo", Foo))
         .to.throw(Error, "The \"$inject\" list should be an array of strings");
+      done();
     });
   });
 
@@ -61,7 +68,7 @@ describe("The \"register\" method of the container instance", () => {
     const vertexes = new Map();
     const container = new Container(new Graph(lifeCycles, modifiers, vertexes), modifiers);
 
-    it("should throw an error", () => {
+    it("should throw an error", done => {
 
       class Bar {
         static get $inject() {
@@ -71,6 +78,7 @@ describe("The \"register\" method of the container instance", () => {
 
       expect(() => container.register("bar", Bar))
         .to.throw(Error, "The \"$inject\" list should be an array of strings");
+      done();
     });
   });
 
@@ -80,13 +88,14 @@ describe("The \"register\" method of the container instance", () => {
     const edges = new Set();
     const container = new Container(new Graph(lifeCycles, modifiers, vertexes, edges), modifiers);
 
-    it("should not register any the new edges", () => {
+    it("should not register any the new edges", done => {
 
       class Foo {}
 
       container.register("foo", Foo);
 
-      expect(edges).to.deep.equal(new Set());
+      expect(edges).to.equal(new Set());
+      done();
     });
   });
 
@@ -96,7 +105,7 @@ describe("The \"register\" method of the container instance", () => {
     const edges = new Set();
     const container = new Container(new Graph(lifeCycles, modifiers, vertexes, edges), modifiers);
 
-    it("should register the new edges", () => {
+    it("should register the new edges", done => {
 
       class Foo {
         static get $inject() {
@@ -106,7 +115,8 @@ describe("The \"register\" method of the container instance", () => {
 
       container.register("foo", Foo);
 
-      expect(edges).to.deep.equal(new Set([["foo", "bar"], ["foo", "rab"]]));
+      expect(edges).to.equal(new Set([["foo", "bar"], ["foo", "rab"]]));
+      done();
     });
   });
 });
@@ -119,8 +129,10 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should throw an error", () => {
+      it("should throw an error", done => {
+
         expect(() => container.get("foo")).to.throw(Error, "foo hasn't been registered");
+        done();
       });
     });
 
@@ -134,8 +146,10 @@ describe("The \"get\" method of the container instance", () => {
         }
         container.register("one", One);
 
-        it("should return the instance of the class", () => {
+        it("should return the instance of the class", done => {
+
           expect(container.get("one")).to.be.an.instanceOf(One);
+          done();
         });
       });
 
@@ -153,12 +167,14 @@ describe("The \"get\" method of the container instance", () => {
           container.register("talent", talent);
           container.register("one", One);
 
-          it("should extend the returned instance with the specified talent", () => {
+          it("should extend the returned instance with the specified talent", done => {
 
             const oneInstance = container.get("one");
 
-            expect(oneInstance).to.have.property("talentMethod").that.is.a("function");
-            expect(oneInstance.talentMethod).to.be.be.deep.equal(talent.talentMethod);
+            expect(oneInstance).to.include("talentMethod");
+            expect(oneInstance.talentMethod).to.be.a.function();
+            expect(oneInstance.talentMethod).to.be.be.equal(talent.talentMethod);
+            done();
           });
         });
 
@@ -180,14 +196,16 @@ describe("The \"get\" method of the container instance", () => {
           container.register("talent2", talent2);
           container.register("one", One);
 
-          it("should extend the returned instance with the specified talents", () => {
+          it("should extend the returned instance with the specified talents", done => {
 
             const oneInstance = container.get("one");
 
-            expect(oneInstance).to.have.property("talentMethod1").that.is.a("function");
-            expect(oneInstance).to.have.property("talentMethod2").that.is.a("function");
-            expect(oneInstance.talentMethod1).to.be.be.deep.equal(talent1.talentMethod1);
-            expect(oneInstance.talentMethod2).to.be.be.deep.equal(talent2.talentMethod2);
+            expect(oneInstance).to.include("talentMethod1");
+            expect(oneInstance.talentMethod1).to.be.a.function();
+            expect(oneInstance.talentMethod2).to.be.a.function();
+            expect(oneInstance.talentMethod1).to.be.be.equal(talent1.talentMethod1);
+            expect(oneInstance.talentMethod2).to.be.be.equal(talent2.talentMethod2);
+            done();
           });
         });
 
@@ -201,10 +219,11 @@ describe("The \"get\" method of the container instance", () => {
           container.register("nonValidTalent", nonValidTalent);
           container.register("one", One);
 
-          it("should throw an error", () => {
+          it("should throw an error", done => {
 
             expect(() => container.get("one"))
-              .to.throw("The talent \"nonValidTalent\" has to be a talent created by the \"#createTalent\" method");
+              .to.throw(Error, "The talent \"nonValidTalent\" has to be a talent created by the \"#createTalent\" method");
+            done();
           });
         });
 
@@ -217,9 +236,10 @@ describe("The \"get\" method of the container instance", () => {
           // The talent is not registered
           container.register("one", One);
 
-          it("should throw an error", () => {
+          it("should throw an error", done => {
 
             expect(() => container.get("one")).to.throw(Error, "The talent \"talent\" is not registered");
+            done();
           });
         });
 
@@ -235,9 +255,10 @@ describe("The \"get\" method of the container instance", () => {
           container.register("talent", talent);
           container.register("one", One);
 
-          it("should throw an error", () => {
+          it("should throw an error", done => {
 
             expect(() => container.get("one")).to.throw(Error, "The \"$compose\" list should be an array of strings");
+            done();
           });
         });
 
@@ -253,9 +274,10 @@ describe("The \"get\" method of the container instance", () => {
           container.register("talent", talent);
           container.register("one", One);
 
-          it("should throw an error", () => {
+          it("should throw an error", done => {
 
             expect(() => container.get("one")).to.throw(Error, "The \"$compose\" list should be an array of strings");
+            done();
           });
         });
 
@@ -272,14 +294,15 @@ describe("The \"get\" method of the container instance", () => {
           container.register("talent", talent);
           container.register("one", One);
 
-          it("should apply the conflict resolutions and extend the instance", () => {
+          it("should apply the conflict resolutions and extend the instance", done => {
 
             const oneInstance = container.get("one");
 
-            expect(oneInstance).to.have.property("renamed1").that.is.a("function");
-            expect(oneInstance).to.have.property("renamed2").that.is.a("function");
-            expect(oneInstance.renamed1).to.be.be.deep.equal(talent.toRename1);
-            expect(oneInstance.renamed2).to.be.be.deep.equal(talent.toRename2);
+            expect(oneInstance).to.include("renamed1");
+            expect(oneInstance).to.include("renamed2");
+            expect(oneInstance.renamed1).to.be.equal(talent.toRename1);
+            expect(oneInstance.renamed2).to.be.equal(talent.toRename2);
+            done();
           });
         });
 
@@ -296,12 +319,13 @@ describe("The \"get\" method of the container instance", () => {
           container.register("talent", talent);
           container.register("one", One);
 
-          it("should apply the conflict resolutions and extend the instance", () => {
+          it("should apply the conflict resolutions and extend the instance", done => {
 
             const oneInstance = container.get("one");
 
-            expect(oneInstance).to.not.have.property("toRemove1");
-            expect(oneInstance).to.not.have.property("toRemove2");
+            expect(oneInstance).to.not.include("toRemove1");
+            expect(oneInstance).to.not.include("toRemove2");
+            done();
           });
         });
 
@@ -320,17 +344,18 @@ describe("The \"get\" method of the container instance", () => {
           container.register("talent", talent);
           container.register("one", One);
 
-          it("should apply the conflict resolutions and extend the instance", () => {
+          it("should apply the conflict resolutions and extend the instance", done => {
 
             const oneInstance = container.get("one");
 
-            expect(oneInstance).to.have.property("renamed1").that.is.a("function");
-            expect(oneInstance).to.have.property("renamed2").that.is.a("function");
-            expect(oneInstance.renamed1).to.be.be.deep.equal(talent.toRename1);
-            expect(oneInstance.renamed2).to.be.be.deep.equal(talent.toRename2);
+            expect(oneInstance).to.include("renamed1");
+            expect(oneInstance).to.include("renamed2");
+            expect(oneInstance.renamed1).to.be.be.equal(talent.toRename1);
+            expect(oneInstance.renamed2).to.be.be.equal(talent.toRename2);
 
-            expect(oneInstance).to.not.have.property("toRemove1");
-            expect(oneInstance).to.not.have.property("toRemove2");
+            expect(oneInstance).to.not.include("toRemove1");
+            expect(oneInstance).to.not.include("toRemove2");
+            done();
           });
         });
       });
@@ -340,7 +365,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should return the instance of the class", () => {
+      it("should return the instance of the class", done => {
 
         class One {
           constructor(dep1, dep2) {
@@ -351,6 +376,7 @@ describe("The \"get\" method of the container instance", () => {
         container.register("one", One);
 
         expect(container.get("one", "foo", "bar")).to.be.an.instanceOf(One);
+        done();
       });
     });
 
@@ -363,8 +389,10 @@ describe("The \"get\" method of the container instance", () => {
       }
       container.register("one", one);
 
-      it("should return the instance of the class", () => {
+      it("should return the instance of the class", done => {
+
         expect(container.get("one")).to.equal("foo");
+        done();
       });
     });
 
@@ -372,7 +400,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should return the instance of the class", () => {
+      it("should return the instance of the class", done => {
 
         function one(dep1, dep2) {
           expect(dep1).to.equal("foo");
@@ -382,6 +410,7 @@ describe("The \"get\" method of the container instance", () => {
         container.register("one", one);
 
         expect(container.get("one", "foo", "bar")).to.equal("foo");
+        done();
       });
     });
 
@@ -392,8 +421,10 @@ describe("The \"get\" method of the container instance", () => {
 
       container.register("one", globalData);
 
-      it("should return the instance of the class", () => {
+      it("should return the instance of the class", done => {
+
         expect(container.get("one")).to.equal(globalData);
+        done();
       });
     });
 
@@ -401,7 +432,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should instantiate the class and its dependencies", () => {
+      it("should instantiate the class and its dependencies", done => {
 
         class Five {}
 
@@ -447,6 +478,7 @@ describe("The \"get\" method of the container instance", () => {
         container.register("four", Four);
         container.register("five", Five);
         expect(container.get("one")).to.be.an.instanceOf(One);
+        done();
       });
     });
 
@@ -454,7 +486,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should instantiate the class and its dependencies", () => {
+      it("should instantiate the class and its dependencies", done => {
 
         class Two {}
         class Three {}
@@ -479,6 +511,7 @@ describe("The \"get\" method of the container instance", () => {
         container.register("four", Four);
         container.register("five", Five);
         expect(container.get("one")).to.be.an.instanceOf(One);
+        done();
       });
     });
 
@@ -486,7 +519,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should throw an error", () => {
+      it("should throw an error", done => {
 
         class Two {}
 
@@ -518,6 +551,7 @@ describe("The \"get\" method of the container instance", () => {
         container.register("four", Four);
         container.register("five", Five);
         expect(container.get("one")).to.be.an.instanceOf(One);
+        done();
       });
     });
 
@@ -525,7 +559,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should throw an error", () => {
+      it("should throw an error", done => {
 
         class Four {}
         class Five {}
@@ -558,6 +592,7 @@ describe("The \"get\" method of the container instance", () => {
         container.register("four", Four);
         container.register("five", Five);
         expect(container.get("one")).to.be.an.instanceOf(One);
+        done();
       });
     });
 
@@ -565,7 +600,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should not throw an error", () => {
+      it("should not throw an error", done => {
 
         class Five {}
 
@@ -612,6 +647,7 @@ describe("The \"get\" method of the container instance", () => {
         container.register("four", Four);
         container.register("five", Five);
         expect(container.get("one")).to.be.an.instanceOf(One);
+        done();
       });
     });
 
@@ -619,7 +655,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should return whatever the function returns", () => {
+      it("should return whatever the function returns", done => {
 
         class One {}
 
@@ -628,6 +664,7 @@ describe("The \"get\" method of the container instance", () => {
         const oneFactory = container.get("oneFactory");
 
         expect(oneFactory.get()).to.be.an.instanceOf(One);
+        done();
       });
     });
 
@@ -636,7 +673,7 @@ describe("The \"get\" method of the container instance", () => {
       const graph = new Graph(lifeCycles, modifiers);
       const container = new Container(graph, modifiers);
 
-      it("should not change the type of the vertex - BUGFIX", () => {
+      it("should not change the type of the vertex - BUGFIX", done => {
 
         class One {}
 
@@ -651,6 +688,7 @@ describe("The \"get\" method of the container instance", () => {
         const vertexDataAfter = graph.getVertexData("one");
 
         expect(vertexDataAfter.type).to.equal("class"); // Checking after the act
+        done();
       });
     });
 
@@ -658,7 +696,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should return whatever the function returns", () => {
+      it("should return whatever the function returns", done => {
 
         function one() {
           return "whatOneReturns";
@@ -666,6 +704,7 @@ describe("The \"get\" method of the container instance", () => {
 
         container.register("one", one);
         expect(container.get("one")).to.be.equal("whatOneReturns");
+        done();
       });
     });
 
@@ -673,7 +712,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should inject whatever the function dependency return", () => {
+      it("should inject whatever the function dependency return", done => {
 
         function two() {
           return "whatTwoReturns";
@@ -688,6 +727,7 @@ describe("The \"get\" method of the container instance", () => {
         container.register("one", one);
         container.register("two", two);
         expect(container.get("one")).to.be.equal("whatOneReturns");
+        done();
       });
     });
 
@@ -695,12 +735,13 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should return the passThrough dependency", () => {
+      it("should return the passThrough dependency", done => {
 
         const one = {"foo": "bar"};
 
         container.register("one", one);
         expect(container.get("one")).to.be.equal(one);
+        done();
       });
     });
 
@@ -708,12 +749,13 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should inject the passThrough dependency", () => {
+      it("should inject the passThrough dependency", done => {
 
         const two = {"foo": "bar"};
 
         function one(twoInject) {
           expect(twoInject).to.equal(two);
+          done();
           return "whatOneReturns";
         }
         one.$inject = ["two"];
@@ -728,7 +770,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should throw an error", () => {
+      it("should throw an error", done => {
 
         /* eslint-disable no-use-before-define */
 
@@ -785,6 +827,7 @@ describe("The \"get\" method of the container instance", () => {
         container.register("four", Four);
         container.register("five", Five);
         expect(() => container.get("one")).to.throw(Error, "A cycle has been detected");
+        done();
       });
     });
 
@@ -834,11 +877,12 @@ describe("The \"get\" method of the container instance", () => {
       container.register("three", Three);
       container.register("four", Four, "perRequest");
 
-      it("should instantiate the \"perRequest\" dependency only once per request", () => {
+      it("should instantiate the \"perRequest\" dependency only once per request", done => {
 
         container.get("one");
 
         expect(four1Instance).to.equal(four2Instance);
+        done();
       });
     });
 
@@ -852,12 +896,13 @@ describe("The \"get\" method of the container instance", () => {
 
       container.register("one", One, "singleton");
 
-      it("should instantiate the vertex only once no matter how many request were made", () => {
+      it("should instantiate the vertex only once no matter how many request were made", done => {
 
         const request1 = container.get("one");
         const request2 = container.get("one");
 
         expect(request1).to.equal(request2);
+        done();
       });
     });
 
@@ -907,12 +952,14 @@ describe("The \"get\" method of the container instance", () => {
       container.register("three", Three);
       container.register("four", Four, "unique");
 
-      it("should instantiate the \"unique\" dependency every time when it's accessed in one request", () => {
+      it("should instantiate the \"unique\" dependency every time when it's accessed in one request", done => {
 
         container.get("one");
 
-        expect(four1Instance).to.not.equal(four2Instance);
-        expect(four1Instance).to.deep.equal(four2Instance);
+        expect(four1Instance).to.be.an.instanceOf(Four);
+        expect(four2Instance).to.be.an.instanceOf(Four);
+        expect(four1Instance).to.not.shallow.equal(four2Instance); // Testing if they are the same reference
+        done();
       });
     });
 
@@ -926,13 +973,15 @@ describe("The \"get\" method of the container instance", () => {
 
       container.register("one", One, "unique");
 
-      it("should instantiate the vertex only once no matter how many requests were made", () => {
+      it("should instantiate the vertex only once no matter how many requests were made", done => {
 
         const request1 = container.get("one");
         const request2 = container.get("one");
 
-        expect(request1).to.not.equal(request2);
-        expect(request1).to.deep.equal(request2);
+        expect(request1).to.be.an.instanceOf(One);
+        expect(request2).to.be.an.instanceOf(One);
+        expect(request1).to.not.shallow.equal(request2); // Testing if they are the same reference
+        done();
       });
     });
 
@@ -940,7 +989,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should not instantiate the vertex but inject a factory for that", () => {
+      it("should not instantiate the vertex but inject a factory for that", done => {
 
         class Three {}
 
@@ -956,13 +1005,16 @@ describe("The \"get\" method of the container instance", () => {
 
         class One {
           constructor(twoFactory) {
-            expect(twoFactory).to.be.an.object;
-            expect(twoFactory).to.have.property("get").that.is.a.function;
+            expect(twoFactory).to.be.an.object();
+            expect(twoFactory).to.include("get");
+            expect(twoFactory.get).to.be.a.function();
 
             const twoInstance = twoFactory.get(true);
 
-            expect(twoInstance).to.have.property("dependency").that.is.an.instanceOf(Three);
-            expect(twoInstance).to.have.property("factorized", true);
+            expect(twoInstance).to.include("dependency");
+            expect(twoInstance.dependency).to.be.an.instanceOf(Three);
+            expect(twoInstance).to.include({"factorized": true});
+            done();
           }
           static get $inject() {
             return ["twoFactory"];
@@ -981,7 +1033,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should throw an error", () => {
+      it("should throw an error", done => {
 
         function two() {}
 
@@ -997,6 +1049,7 @@ describe("The \"get\" method of the container instance", () => {
         container.register("two", two);
 
         expect(() => container.get("one")).to.throw(Error, "Only classes can be factorized");
+        done();
       });
     });
 
@@ -1004,7 +1057,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should throw an error", () => {
+      it("should throw an error", done => {
 
         const two = {"foo": "bar"};
 
@@ -1019,6 +1072,7 @@ describe("The \"get\" method of the container instance", () => {
         container.register("two", two);
 
         expect(() => container.get("one")).to.throw(Error, "Only classes can be factorized");
+        done();
       });
     });
 
@@ -1026,11 +1080,12 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should inject a null value", () => {
+      it("should inject a null value", done => {
 
         class One {
           constructor(two) {
-            expect(two).to.be.null;
+            expect(two).to.be.null();
+            done();
           }
           static get $inject() {
             return ["two?"];
@@ -1047,7 +1102,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should overload the constructor with that parameter", () => {
+      it("should overload the constructor with that parameter", done => {
 
         const extraParam1 = "foo";
         const extraParam2 = "bar";
@@ -1058,6 +1113,7 @@ describe("The \"get\" method of the container instance", () => {
           constructor(two, overLoad1, overLoad2) {
             expect(overLoad1).to.equal(extraParam1);
             expect(overLoad2).to.equal(extraParam2);
+            done();
           }
           static get $inject() {
             return ["two"];
@@ -1075,7 +1131,7 @@ describe("The \"get\" method of the container instance", () => {
 
       const container = new Container(new Graph(lifeCycles, modifiers), modifiers);
 
-      it("should overload the function with that parameter", () => {
+      it("should overload the function with that parameter", done => {
 
         const extraParam1 = "foo";
         const extraParam2 = "bar";
@@ -1085,6 +1141,7 @@ describe("The \"get\" method of the container instance", () => {
         function one(two, overLoad1, overLoad2) {
           expect(overLoad1).to.equal(extraParam1);
           expect(overLoad2).to.equal(extraParam2);
+          done();
         }
         one.$inject = ["two"];
 

@@ -4,4 +4,3 @@ test-lib/
 .eslintrc
 .travis.yml
 Gruntfile.js
-test_results.txt
