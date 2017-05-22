@@ -30,3 +30,5 @@
 **Fixing package.json** Fixing description in package.json
 ## v3.0.4 (21/05/2017)
 **Adding test coverage badge** Adding test coverage (coveralls.io) badge
+## v3.0.5 (22/05/2017)
+**Adding jsdoc**
