@@ -50,6 +50,6 @@
     "load-grunt-tasks": "^3.5.2"
   },
   "dependencies": {
-    "talentcomposer": "^2.0.2"
+    "talentcomposer": "^2.0.3"
   }
 }
