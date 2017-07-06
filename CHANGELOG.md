@@ -34,3 +34,5 @@
 **Adding jsdoc**
 ## v3.0.6 (05/06/2017)
 **Upgrading packages** To clear up badges
+## v3.0.7 (06/07/2017)
+**Upgrading packages** To clear up badges
