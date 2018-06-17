@@ -36,3 +36,5 @@
 **Upgrading packages** To clear up badges
 ## v3.0.7 (06/07/2017)
 **Upgrading packages** To clear up badges
+## v3.0.8 (17/06/2018)
+**Building on node v8** Making sure that mainliner is good with node v8. Also upgrading packages.
