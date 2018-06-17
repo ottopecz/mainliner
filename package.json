@@ -41,15 +41,15 @@
   "homepage": "https://github.com/ottopecz/mainliner#readme",
   "devDependencies": {
     "code": "^4.1.0",
-    "eslint": "^4.1.1",
-    "grunt": "^1.0.1",
-    "grunt-coveralls": "^1.0.1",
-    "grunt-eslint": "^20.0.0",
+    "eslint": "^4.19.1",
+    "grunt": "^1.0.3",
+    "grunt-coveralls": "^2.0.0",
+    "grunt-eslint": "^20.2.0",
     "grunt-shell": "^2.1.0",
-    "lab": "^14.1.0",
+    "lab": "^14.3.4",
     "load-grunt-tasks": "^3.5.2"
   },
   "dependencies": {
-    "talentcomposer": "^2.0.4"
+    "talentcomposer": "^2.0.5"
   }
 }
