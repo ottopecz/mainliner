@@ -4,10 +4,10 @@
 
 # mainliner
 
-Inversion of control container and dependency injector for node6 and node8 spiced with [talent composition](http://scg.unibe.ch/archive/papers/Ress12eTalentsSPE.pdf).
+Inversion of control container and dependency injector for node8 and node10 spiced with [talent composition](http://scg.unibe.ch/archive/papers/Ress12eTalentsSPE.pdf).
 
 With **mainliner** you can create ioc containers. You can register your classes, functions and other things on the container. When you are accessing a class, **mainliner** is going to create the instance for you. If you defined dependencies for the class they will also be instantiated recursively. If you want you can even do basic composition with the interface of other classes and functions. You can also manage the life cycle of the instances. You can just tell **mainliner** which instance is supposed to be a generic singleton, a singleton per request perhaps a unique.
-The inspiration is the excellent [intravenous](github.com/RoyJacobs/intravenous) which seems to be abandoned. All the interfaces of [intravenous](github.com/RoyJacobs/intravenous) reimplemented from scratch in node6. With some exceptions...
+The inspiration is the excellent [intravenous](github.com/RoyJacobs/intravenous) which seems to be abandoned. All the interfaces of [intravenous](github.com/RoyJacobs/intravenous) reimplemented from scratch. With some exceptions...
 
 Differences between **mainliner** and **intravenous**
 
@@ -24,7 +24,7 @@ You can register 3 kinds of things on a **mainliner** container
 
 ##Supported engines
 
-node v6 and v8
+node v8 and v10
 
 ## Getting started
 #### Basics
