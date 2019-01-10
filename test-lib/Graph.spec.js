@@ -10,48 +10,43 @@ describe("The \"graph\" instance", () => {
 
     const graph = new Graph({}, {});
 
-    it("should be an instance of the Graph class", done => {
+    it("should be an instance of the Graph class", () => {
 
       expect(graph).to.be.an.instanceOf(Graph);
-      done();
     });
   });
 
   describe("when it gets created without the \"lifeCycles\" parameter", () => {
 
-    it("should throw an error", done => {
+    it("should throw an error", () => {
 
       expect(() => new Graph()).to.throw(Error, "The life cycles must be a parameter of the constructor");
-      done();
     });
   });
 
   describe("when it gets created without the \"modifiers\" parameter", () => {
 
-    it("should throw an error", done => {
+    it("should throw an error", () => {
 
       expect(() => new Graph({})).to.throw(Error, "The modifiers must be a parameter of the constructor");
-      done();
     });
   });
 
   describe("when it gets created with none Map vertexes parameter", () => {
 
-    it("should throw a type error", done => {
+    it("should throw a type error", () => {
 
       expect(() => new Graph({}, {}, "noneMap"))
         .to.throw(TypeError, "The vertexes parameter has to be a Map");
-      done();
     });
   });
 
   describe("when it gets created with a none Set edges parameter", () => {
 
-    it("should throw a type error", done => {
+    it("should throw a type error", () => {
 
       expect(() => new Graph({}, {}, new Map(), "noneSet"))
         .to.throw(TypeError, "The edges parameter has to be a Set");
-      done();
     });
   });
 });
@@ -71,11 +66,10 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
 
     graph.addVertex("foo", classVertex, "lifeCycleMock");
 
-    it("should throw an error", done => {
+    it("should throw an error", () => {
 
       expect(() => graph.addVertex("foo", classVertex, "lifeCycleMock"))
         .to.throw(Error, "foo has already been registered");
-      done();
     });
   });
 
@@ -90,7 +84,7 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
 
     class classVertex {}
 
-    it("should add a new class vertex", done => {
+    it("should add a new class vertex", () => {
 
       graph.addVertex("foo", classVertex, "known");
 
@@ -99,7 +93,6 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
         "lifeCycle": "known",
         "type": "class"
       });
-      done();
     });
   });
 
@@ -113,10 +106,9 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
 
     class classVertex {}
 
-    it("should add a new function vertex", done => {
+    it("should add a new function vertex", () => {
 
       expect(() => graph.addVertex("foo", classVertex, "unknown")).to.throw(RangeError, "Unknown lifecycle");
-      done();
     });
   });
 
@@ -134,7 +126,7 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
 
     class classVertex {}
 
-    it("should add a new class vertex with the default life cycle", done => {
+    it("should add a new class vertex with the default life cycle", () => {
 
       graph.addVertex("foo", classVertex);
 
@@ -143,7 +135,6 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
         "lifeCycle": "lifeCycleMock",
         "type": "class"
       });
-      done();
     });
   });
 
@@ -154,7 +145,7 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
 
     function funcVertex() {}
 
-    it("should add a new class vertex", done => {
+    it("should add a new class vertex", () => {
 
       graph.addVertex("foo", funcVertex);
 
@@ -162,7 +153,6 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
         "vertex": funcVertex,
         "type": "function"
       });
-      done();
     });
   });
 
@@ -173,7 +163,7 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
 
     const passThroughVertex = {"pass": "through"};
 
-    it("should add a new passThrough vertex", done => {
+    it("should add a new passThrough vertex", () => {
 
       graph.addVertex("foo", passThroughVertex);
 
@@ -181,7 +171,6 @@ describe("The \"addVertex\" method of the \"graph\" instance", () => {
         "vertex": passThroughVertex,
         "type": "passThrough"
       });
-      done();
     });
   });
 });
@@ -192,10 +181,9 @@ describe("The \"getVertexData\" method of the \"graph\" instance", () => {
 
     const graph = new Graph({}, {});
 
-    it("should return undefined", done => {
+    it("should return undefined", () => {
 
       expect(graph.getVertexData("foo")).to.be.undefined();
-      done();
     });
   });
 
@@ -216,7 +204,7 @@ describe("The \"getVertexData\" method of the \"graph\" instance", () => {
       "type": "class"
     }], ["bar", barData]]));
 
-    it("should return the shallow copy of the meta data of the specified vertex", done => {
+    it("should return the shallow copy of the meta data of the specified vertex", () => {
 
       const data = graph.getVertexData("bar");
 
@@ -227,7 +215,6 @@ describe("The \"getVertexData\" method of the \"graph\" instance", () => {
         "lifeCycle": "lifeCycleMock",
         "type": "class"
       });
-      done();
     });
   });
 });
@@ -240,13 +227,12 @@ describe("The \"addEdge\" method of the \"graph\" instance", () => {
     const newEdge = ["foo", "bar"];
     const graph = new Graph({}, {}, new Map(), edges);
 
-    it("should return the meta data of the specified vertex", done => {
+    it("should return the meta data of the specified vertex", () => {
 
       graph.addEdge(newEdge);
 
       expect(edges.size).to.equal(1);
       expect(edges.values().next().value).to.equal(newEdge);
-      done();
     });
   });
 
@@ -256,10 +242,9 @@ describe("The \"addEdge\" method of the \"graph\" instance", () => {
     const newEdge = ["foo", "bar"];
     const graph = new Graph({}, {}, new Map(), edges);
 
-    it("should throw a \"Duplicated edge\" error", done => {
+    it("should throw a \"Duplicated edge\" error", () => {
 
       expect(() => graph.addEdge(newEdge)).to.throw(Error, "Duplicated edge");
-      done();
     });
   });
 });
@@ -305,12 +290,11 @@ describe("The \"getAdjacentVertexes\" method of the \"graph\" instance", () => {
     const edges = new Set([["a", "b"], ["a", "c"]]);
     const graph = new Graph({}, modifiersMock, vertexes, edges);
 
-    it("should return the adjacent vertexes of the given vertex as a Map", done => {
+    it("should return the adjacent vertexes of the given vertex as a Map", () => {
 
       const adjacentVertexes = graph.getAdjacentVertexes("a");
 
       expect(adjacentVertexes).to.equal(new Set(["b", "c"]));
-      done();
     });
   });
 
@@ -340,12 +324,11 @@ describe("The \"getAdjacentVertexes\" method of the \"graph\" instance", () => {
     const edges = new Set([["a", "b"], ["a", "c"]]);
     const graph = new Graph({}, modifiersMock, vertexes, edges);
 
-    it("should return the adjacent vertexes of the given vertex as a Map", done => {
+    it("should return the adjacent vertexes of the given vertex as a Map", () => {
 
       const adjacentVertexes = graph.getAdjacentVertexes("aFactory");
 
       expect(adjacentVertexes).to.equal(new Set(["b", "c"]));
-      done();
     });
   });
 
@@ -375,12 +358,11 @@ describe("The \"getAdjacentVertexes\" method of the \"graph\" instance", () => {
     const edges = new Set([["a", "b"], ["a", "c"]]);
     const graph = new Graph({}, modifiersMock, vertexes, edges);
 
-    it("should return the adjacent vertexes of the given vertex as a Map", done => {
+    it("should return the adjacent vertexes of the given vertex as a Map", () => {
 
       const adjacentVertexes = graph.getAdjacentVertexes("a?");
 
       expect(adjacentVertexes).to.equal(new Set(["b", "c"]));
-      done();
     });
   });
 
@@ -410,12 +392,11 @@ describe("The \"getAdjacentVertexes\" method of the \"graph\" instance", () => {
     const edges = new Set([["a", "b"], ["a", "c"]]);
     const graph = new Graph({}, modifiersMock, vertexes, edges);
 
-    it("should return the adjacent vertexes of the given vertex as a Map", done => {
+    it("should return the adjacent vertexes of the given vertex as a Map", () => {
 
       const adjacentVertexes = graph.getAdjacentVertexes("aFactory?");
 
       expect(adjacentVertexes).to.equal(new Set(["b", "c"]));
-      done();
     });
   });
 });

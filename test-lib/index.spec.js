@@ -8,10 +8,9 @@ const {describe, it} = exports.lab = Lab.script();
 
 describe("The index", () => {
 
-  it("should export \"mainliner\"", done => {
+  it("should export \"mainliner\"", () => {
 
     expect(mainliner).be.an.object();
-    done();
   });
 });
 
@@ -21,17 +20,16 @@ describe("The create method of the mainliner", () => {
 
     const container = mainliner.create();
 
-    it("should return a container", done => {
+    it("should return a container", () => {
 
       expect(container).to.be.an.instanceOf(Container);
-      done();
     });
   });
 });
 
 describe("The \"createTalent\" method", () => {
 
-  it("should be a delegation of \"Composer.createTalent\"", done => {
+  it("should be a delegation of \"Composer.createTalent\"", () => {
 
     const talent = mainliner.createTalent({
       method() {}
@@ -40,15 +38,13 @@ describe("The \"createTalent\" method", () => {
     expect(talent).to.be.an.object();
     expect(talent).to.include("method");
     expect(talent.method).to.equal(talent.method);
-    done();
   });
 });
 
 describe("The \"required\" property", () => {
 
-  it("should be a delegation of \"Composer.required\"", done => {
+  it("should be a delegation of \"Composer.required\"", () => {
 
     expect(mainliner.required).to.be.equal(Composer.required);
-    done();
   });
 });

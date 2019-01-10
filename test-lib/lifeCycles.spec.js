@@ -8,37 +8,32 @@ describe("The \"lifeCycles\" object", () => {
 
   describe("\"contains\" method", () => {
 
-    it("should return \"true\" if the parameter is \"perRequest\"", done => {
+    it("should return \"true\" if the parameter is \"perRequest\"", () => {
 
       expect(lifeCycles.contains("perRequest")).to.be.true();
-      done();
     });
 
-    it("should return \"true\" if the parameter is \"singleton\"", done => {
+    it("should return \"true\" if the parameter is \"singleton\"", () => {
 
       expect(lifeCycles.contains("singleton")).to.be.true();
-      done();
     });
 
-    it("should return \"true\" if the parameter is \"unique\"", done => {
+    it("should return \"true\" if the parameter is \"unique\"", () => {
 
       expect(lifeCycles.contains("unique")).to.be.true();
-      done();
     });
 
-    it("should return \"false\" if the parameter is anything else", done => {
+    it("should return \"false\" if the parameter is anything else", () => {
 
       expect(lifeCycles.contains("whatever")).to.be.false();
-      done();
     });
   });
 
   describe("\"getDefault\" method", () => {
 
-    it("should return \"perRequest\"", done => {
+    it("should return \"perRequest\"", () => {
 
       expect(lifeCycles.getDefault()).to.equal("perRequest");
-      done();
     });
   });
 });
