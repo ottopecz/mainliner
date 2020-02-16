@@ -3,4 +3,3 @@ test-lib/
 .gitignore
 .eslintrc
 .travis.yml
-Gruntfile.js
